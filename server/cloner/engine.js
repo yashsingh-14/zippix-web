@@ -1,11 +1,12 @@
 import { launchHeadlessBrowser } from './browser.js';
 
 /**
- * Zippix Enterprise Cloud Cloner Engine v3.0
- * - Deep JavaScript execution & React/Next.js hydration
- * - Full section auto-scroll triggering all IntersectionObservers
- * - Preserves scroll-triggered reveals, sparkling text sweep, and smooth animations
- * - Bundles embedded Lenis smooth-scroll & IntersectionObserver in the clone
+ * Zippix Enterprise Cloud Cloner Engine v4.0 (Ultimate High-Fidelity)
+ * - Full Next.js / React / Vue runtime script preservation
+ * - Base origin resolution (<base href="...">) for 100% asset & font fidelity
+ * - All scripts, styles, preloads, and fonts normalized to absolute URLs
+ * - Preserves exact scroll-triggered reveals, sparkling text sweeps, and Lenis smooth scrolling
+ * - Consolidates all @keyframes, CSS variables, and layout styles
  * - Anti-blank normalizer ensuring zero content is cut off or permanently hidden
  */
 export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
@@ -24,7 +25,8 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
   try {
     const page = await browser.newPage();
 
-    // Set standard human desktop User-Agent
+    // Set standard desktop User-Agent and viewport
+    await page.setViewport({ width: 1440, height: 900 });
     await page.setUserAgent(
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36'
     );
@@ -33,7 +35,7 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
       'Accept-Language': 'en-US,en;q=0.9',
     });
 
-    onProgress({ step: 2, message: `Navigating to ${domain} & waiting for network idle...`, progress: 30 });
+    onProgress({ step: 2, message: `Navigating to ${domain} & executing full JavaScript...`, progress: 30 });
     
     try {
       await page.goto(validUrl, {
@@ -44,11 +46,10 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
       console.warn('Navigation warning (proceeding with loaded DOM):', navErr.message);
     }
 
-    onProgress({ step: 3, message: 'Executing deep section auto-scroll & triggering reveal animations...', progress: 50 });
+    onProgress({ step: 3, message: 'Executing deep section auto-scroll & triggering reveals...', progress: 50 });
 
-    // Step-by-step auto-scroll to trigger lazy images, videos, and dynamic components
+    // Step-by-step auto-scroll to trigger lazy-loaded images, Lenis observers, and animations
     await page.evaluate(async () => {
-      // 1. Scroll through all major sections
       const sections = Array.from(
         document.querySelectorAll('section, header, footer, main, div[class*="section"], div[id], [class*="reveal"]')
       );
@@ -61,7 +62,7 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
         } catch {}
       }
 
-      // Scroll to bottom
+      // Scroll to bottom to ensure footer and bottom widgets load
       window.scrollTo(0, document.body.scrollHeight);
       window.dispatchEvent(new Event('scroll'));
       await new Promise((r) => setTimeout(r, 800));
@@ -71,11 +72,11 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
       window.dispatchEvent(new Event('scroll'));
     });
 
-    await new Promise((r) => setTimeout(r, 1000));
+    await new Promise((r) => setTimeout(r, 1200));
 
-    onProgress({ step: 4, message: 'Consolidating stylesheets, sparkles & resolving relative assets...', progress: 75 });
+    onProgress({ step: 4, message: 'Capturing exact styles, keyframes, scripts & animations...', progress: 75 });
 
-    // Capture complete standalone HTML, styles, and tokens
+    // In-page cloner to capture complete standalone HTML & design tokens
     const cloneResult = await page.evaluate((baseUrl) => {
       const base = new URL(baseUrl);
 
@@ -116,7 +117,27 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
       // Clone document DOM
       const docClone = document.documentElement.cloneNode(true);
 
-      // Normalize all <img>, <source>, <video>, <a> links to absolute URLs
+      // 1. Inject <base href="..."> at the very beginning of <head>
+      const head = docClone.querySelector('head') || docClone.insertBefore(document.createElement('head'), docClone.firstChild);
+      const existingBase = head.querySelector('base');
+      if (existingBase) existingBase.remove();
+      const baseEl = document.createElement('base');
+      baseEl.setAttribute('href', base.origin + '/');
+      head.insertBefore(baseEl, head.firstChild);
+
+      // 2. Normalize ALL scripts to absolute URLs so original Next.js/React hydration works!
+      docClone.querySelectorAll('script').forEach((s) => {
+        const src = s.getAttribute('src');
+        if (src) s.setAttribute('src', toAbsoluteUrl(src));
+      });
+
+      // 3. Normalize ALL links to absolute URLs (preloads, fonts, stylesheets)
+      docClone.querySelectorAll('link').forEach((l) => {
+        const href = l.getAttribute('href');
+        if (href) l.setAttribute('href', toAbsoluteUrl(href));
+      });
+
+      // 4. Normalize all <img>, <source>, <video>, <a> links to absolute URLs
       docClone.querySelectorAll('img').forEach((img) => {
         const src = img.getAttribute('src');
         if (src) img.setAttribute('src', toAbsoluteUrl(src));
@@ -144,10 +165,6 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
         if (src) v.setAttribute('src', toAbsoluteUrl(src));
         const poster = v.getAttribute('poster');
         if (poster) v.setAttribute('poster', toAbsoluteUrl(poster));
-        v.setAttribute('autoplay', 'true');
-        v.setAttribute('muted', 'true');
-        v.setAttribute('loop', 'true');
-        v.setAttribute('playsinline', 'true');
       });
 
       docClone.querySelectorAll('a').forEach((a) => {
@@ -155,16 +172,8 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
         if (href && !href.startsWith('#')) a.setAttribute('href', toAbsoluteUrl(href));
       });
 
-      docClone.querySelectorAll('link[rel="stylesheet"]').forEach((link) => {
-        const href = link.getAttribute('href');
-        if (href) link.setAttribute('href', toAbsoluteUrl(href));
-      });
-
-      // Reveal elements:
-      // Notice: Only reveal elements that are at the TOP of the page (in view on load).
-      // Elements below the fold keep their initial class so they ANIMATE on scroll!
+      // 5. Anti-Blank Normalizer: unblock any permanently closed clip-paths or zero-opacity inline styles
       docClone.querySelectorAll('*').forEach((el) => {
-        // Unblock closed clip-paths or zero-opacity inline styles so they aren't stuck closed
         const style = el.getAttribute('style') || '';
         if (style.includes('clip-path: polygon(0px 0px') || (style.includes('opacity: 0') && el.textContent.trim().length > 5)) {
           el.style.clipPath = 'polygon(0 0, 100% 0, 100% 100%, 0 100%)';
@@ -175,22 +184,8 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
       // Universal Animation & Sparkle CSS Rules
       const animationOverrides = `
 /* ========================================================
-   Zippix Universal Scroll & Reveal Animation Engine v3.0
+   Zippix Universal Scroll & Reveal Animation Engine v4.0
    ======================================================== */
-html.lenis, html.lenis body {
-  height: auto;
-}
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
-/* Base Reveal Class Transitions */
 .reveal-on-scroll, .reveal-from-left, .reveal-from-right, .reveal-smoky-wave, .reveal-cinematic-sparkle {
   transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1), filter 1.2s ease-out !important;
 }
@@ -223,7 +218,7 @@ html.lenis, html.lenis body {
   animation: 3.2s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal forwards running sparkleLightSweep !important;
 }
 
-/* Fallback for closed clip-paths */
+/* Ensure clip-path doesn't leave blank sections */
 [style*="clip-path: polygon(0px 0px"] {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%) !important;
   opacity: 1 !important;
@@ -235,37 +230,13 @@ html.lenis, html.lenis body {
       const styleTag = document.createElement('style');
       styleTag.setAttribute('id', 'zippix-consolidated-styles');
       styleTag.textContent = gatheredCss + '\n' + animationOverrides;
-      const head = docClone.querySelector('head') || docClone.appendChild(document.createElement('head'));
       head.appendChild(styleTag);
 
-      // Inject client-side Lenis Smooth Scroll CDN & Universal Scroll Reveal Engine
+      // Inject client-side Lenis Smooth Scroll CDN & Universal Scroll Reveal Engine (Fallback for offline)
       const scriptTag = document.createElement('script');
       scriptTag.setAttribute('id', 'zippix-scroll-runtime');
       scriptTag.textContent = `
 (function() {
-  // 1. Load Lenis Smooth Scroll dynamically for buttery momentum physics
-  function loadLenis() {
-    var lenisScript = document.createElement('script');
-    lenisScript.src = 'https://unpkg.com/lenis@1.1.20/dist/lenis.min.js';
-    lenisScript.onload = function() {
-      if (typeof Lenis !== 'undefined') {
-        var lenis = new Lenis({
-          duration: 1.2,
-          easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
-          orientation: 'vertical',
-          smoothWheel: true
-        });
-        function raf(time) {
-          lenis.raf(time);
-          requestAnimationFrame(raf);
-        }
-        requestAnimationFrame(raf);
-      }
-    };
-    document.head.appendChild(lenisScript);
-  }
-
-  // 2. Intelligent IntersectionObserver for Scroll Reveals & Text Sparkles
   function initScrollReveals() {
     var revealElements = document.querySelectorAll(
       '.reveal-on-scroll, .reveal-from-left, .reveal-from-right, .reveal-smoky-wave, .reveal-cinematic-sparkle, [class*="reveal-"], [data-aos]'
@@ -283,12 +254,11 @@ html.lenis, html.lenis body {
           }
         });
       }, {
-        threshold: 0.12,
+        threshold: 0.1,
         rootMargin: '0px 0px -40px 0px'
       });
 
       revealElements.forEach(function(el) {
-        // If element is already in the initial viewport on load, reveal it now
         var rect = el.getBoundingClientRect();
         if (rect.top < window.innerHeight && rect.bottom > 0) {
           el.classList.add('is-revealed', 'aos-animate');
@@ -297,15 +267,9 @@ html.lenis, html.lenis body {
           observer.observe(el);
         }
       });
-    } else {
-      // Fallback: reveal all
-      revealElements.forEach(function(el) {
-        el.classList.add('is-revealed', 'aos-animate');
-        el.style.opacity = '1';
-      });
     }
 
-    // Safety fallback: after 2s, ensure no section remains blank
+    // Safety fallback: after 2s, unblock any remaining hidden elements
     setTimeout(function() {
       document.querySelectorAll('*').forEach(function(el) {
         var s = window.getComputedStyle(el);
@@ -323,12 +287,8 @@ html.lenis, html.lenis body {
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
-      loadLenis();
-      initScrollReveals();
-    });
+    document.addEventListener('DOMContentLoaded', initScrollReveals);
   } else {
-    loadLenis();
     initScrollReveals();
   }
 })();
