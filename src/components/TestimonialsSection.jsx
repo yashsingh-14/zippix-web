@@ -38,7 +38,7 @@ export const TestimonialsSection = () => {
         </div>
 
         <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
-          Loved by <span className="font-serif-italic text-ankit-gradient">Engineers & Creators</span>
+          Loved by <span className="text-gradient-electric">Engineers & Creators</span>
         </h2>
         <p className="text-sm sm:text-base text-slate-400 leading-relaxed font-normal">
           Real feedback from engineers using Zippix to analyze, migrate, and reconstruct web architecture.

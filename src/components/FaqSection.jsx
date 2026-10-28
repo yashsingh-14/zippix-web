@@ -44,7 +44,7 @@ export const FaqSection = () => {
         </div>
 
         <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
-          Frequently <span className="font-serif-italic text-ankit-gradient">Asked Questions</span>
+          Frequently <span className="text-gradient-electric">Asked Questions</span>
         </h2>
         <p className="text-sm sm:text-base text-slate-400 max-w-xl mx-auto font-normal">
           Clear answers about Zippix cloud architecture, extraction depths, and export formats.

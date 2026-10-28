@@ -62,7 +62,7 @@ export const PersonasSection = () => {
         </div>
 
         <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
-          Built for <span className="font-serif-italic text-ankit-gradient">Visionary Creators</span>
+          Built for <span className="text-gradient-electric">Modern Developers & Teams</span>
         </h2>
         <p className="text-sm sm:text-base text-slate-400 leading-relaxed font-normal">
           Whether you are modernizing a legacy web experience, archiving vital assets, or learning from production

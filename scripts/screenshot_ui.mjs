@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer-core';
 import { getAvailableBrowserPath } from '../server/cloner/browser.js';
 
-async function screenshotSections() {
+async function screenshotZippix() {
   const executablePath = getAvailableBrowserPath();
   const browser = await puppeteer.launch({
     executablePath,
@@ -12,21 +12,24 @@ async function screenshotSections() {
   const page = await browser.newPage();
   await page.setViewport({ width: 1440, height: 900 });
   await page.goto('http://localhost:3000', { waitUntil: 'networkidle2' });
-  await new Promise(r => setTimeout(r, 1000));
+  await new Promise(r => setTimeout(r, 1200));
 
-  // Scroll to vision section
+  // Hero Screenshot
+  await page.screenshot({ path: 'scripts/debug_output/zippix_hero.png', fullPage: false });
+
+  // Scroll to Tools section
   await page.evaluate(() => {
-    const el = document.getElementById('vision-section');
+    const el = document.getElementById('tools-section');
     if (el) el.scrollIntoView({ behavior: 'instant' });
   });
   await new Promise(r => setTimeout(r, 800));
-  await page.screenshot({ path: 'scripts/debug_output/our_vision_section.png', fullPage: false });
+  await page.screenshot({ path: 'scripts/debug_output/zippix_tools.png', fullPage: false });
 
-  // Full page screenshot
-  await page.screenshot({ path: 'scripts/debug_output/full_landing_page.png', fullPage: true });
+  // Full Page Screenshot
+  await page.screenshot({ path: 'scripts/debug_output/zippix_full.png', fullPage: true });
 
   await browser.close();
-  console.log('Screenshots saved successfully');
+  console.log('Zippix screenshots saved successfully');
 }
 
-screenshotSections();
+screenshotZippix();

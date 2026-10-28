@@ -11,7 +11,7 @@ export const DashboardShowcase = () => {
         </div>
 
         <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
-          Inspection & <span className="font-serif-italic text-ankit-gradient">Code Extraction</span>
+          Inspection & <span className="text-gradient-electric">Code Extraction</span>
         </h2>
         <p className="text-sm sm:text-base text-slate-400 leading-relaxed font-normal">
           Inspect extracted DOM components, switch viewports, explore design tokens, and download clean production code

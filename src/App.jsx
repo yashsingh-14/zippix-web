@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Header } from './components/Header.jsx';
 import { UrlInputBar } from './components/UrlInputBar.jsx';
 import { MarqueeBanner } from './components/MarqueeBanner.jsx';
@@ -14,7 +14,17 @@ import { AboutModal } from './components/AboutModal.jsx';
 import { PrivacyModal } from './components/PrivacyModal.jsx';
 import { TermsModal } from './components/TermsModal.jsx';
 import { ContactModal } from './components/ContactModal.jsx';
-import { Sparkles, Rocket, Globe, Shield, CheckCircle2, ArrowRight } from 'lucide-react';
+import {
+  Sparkles,
+  Rocket,
+  Zap,
+  Palette,
+  FolderArchive,
+  Cpu,
+  Layers,
+  ArrowRight,
+  ShieldCheck,
+} from 'lucide-react';
 
 export default function App() {
   const [url, setUrl] = useState('');
@@ -96,11 +106,11 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col ankit-canvas text-slate-100 overflow-x-hidden selection:bg-blue-500/30 selection:text-blue-200">
-      {/* Signature Atmospheric Side Glow Auras (Faithfully matching Ankit Sajwan reference) */}
-      <div className="fixed top-24 -left-48 w-[650px] h-[650px] rounded-full bg-blue-600/25 blur-[160px] pointer-events-none -z-10" />
-      <div className="fixed top-[45%] -right-48 w-[550px] h-[550px] rounded-full bg-indigo-600/20 blur-[170px] pointer-events-none -z-10" />
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[900px] h-[350px] rounded-full bg-blue-500/15 blur-[140px] pointer-events-none -z-10" />
+    <div className="relative min-h-screen flex flex-col zippix-canvas text-slate-100 overflow-x-hidden selection:bg-blue-500/30 selection:text-blue-200">
+      {/* Signature Atmospheric Side Glow Auras */}
+      <div className="fixed top-24 -left-48 w-[650px] h-[650px] rounded-full bg-blue-600/20 blur-[160px] pointer-events-none -z-10" />
+      <div className="fixed top-[40%] -right-48 w-[550px] h-[550px] rounded-full bg-indigo-600/20 blur-[170px] pointer-events-none -z-10" />
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[900px] h-[350px] rounded-full bg-blue-500/10 blur-[140px] pointer-events-none -z-10" />
 
       {/* Header */}
       <Header
@@ -119,31 +129,28 @@ export default function App() {
           {/* Announcement Badge */}
           <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-1.5 text-xs font-semibold text-blue-300 backdrop-blur-md shadow-sm">
             <Sparkles className="h-3.5 w-3.5 text-blue-400" />
-            <span>Next-Generation AI Web Reconstruction Engine</span>
+            <span>Zippix Cloud Engine v2.0 • Headless Web Reconstructor</span>
           </div>
 
-          {/* Master Headline with Ankit Sajwan Typographic Pairing */}
+          {/* Master Headline */}
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] text-white">
-            Reconstruct Any Website into{' '}
+            Turn Any Webpage into{' '}
             <br className="hidden sm:inline" />
-            <span className="font-serif-italic text-ankit-gradient text-5xl sm:text-7xl lg:text-8xl">
-              Pure Source Code
-            </span>{' '}
-            & Instant ZIP
+            <span className="text-gradient-electric">Production-Ready Code</span> & Offline ZIP
           </h1>
 
           {/* Subtitle */}
           <p className="mx-auto max-w-3xl text-sm sm:text-base text-slate-400 leading-relaxed font-normal">
-            Single-click headless Chromium execution to capture full DOM architectures, 60 FPS motion layers, and
-            Tailwind design tokens without breaking a single asset.
+            Extract pixel-perfect HTML, production-ready Tailwind CSS design tokens, dynamic 60 FPS animation layers,
+            and self-contained offline media in single-click headless execution.
           </p>
 
-          {/* Big Input Capsule Card */}
+          {/* Input Capsule Card */}
           <div className="pt-2">
             <UrlInputBar onClone={handleClone} isLoading={isLoading} />
           </div>
 
-          {/* Error Message */}
+          {/* Error Banner */}
           {error && (
             <div className="mx-auto max-w-xl rounded-xl border border-red-500/40 bg-red-950/40 p-4 text-xs text-red-200 text-center backdrop-blur-md">
               {error}
@@ -165,26 +172,47 @@ export default function App() {
           </div>
         )}
 
-        {/* Ankit Sajwan Inspired Vision & Philosophy Section */}
-        <section id="vision-section" className="py-24 relative overflow-hidden border-y border-white/[0.06] bg-[#020408]/60 backdrop-blur-sm">
-          <div className="mx-auto max-w-4xl px-4 sm:px-6 text-center space-y-8">
-            <div className="space-y-3">
-              <p className="text-xs font-mono uppercase tracking-widest text-blue-400">Our Core Philosophy</p>
-              <h2 className="text-4xl sm:text-6xl font-light tracking-tight text-white">
-                Our <span className="font-serif-italic text-ankit-gradient text-5xl sm:text-7xl">Vision</span>
-              </h2>
+        {/* Zippix Architecture Highlights & Performance Metrics */}
+        <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="glass-card glass-card-hover p-6 rounded-2xl text-left space-y-2.5">
+              <div className="h-10 w-10 rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-400 flex items-center justify-center">
+                <Zap className="h-5 w-5" />
+              </div>
+              <h4 className="text-base font-bold text-white">Sub-12s Cloud Virtualization</h4>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Headless Chromium runtime parses full React/Next.js hydration trees and CSS layouts in seconds.
+              </p>
             </div>
 
-            <p className="text-xl sm:text-2xl lg:text-3xl font-light text-slate-200 leading-relaxed max-w-3xl mx-auto">
-              To <span className="font-serif-italic text-ankit-gradient">Democratize the Web</span> — To unveil the{' '}
-              <span className="font-serif-italic text-ankit-gradient">True Architecture of Code</span> as clean, production-ready source — To{' '}
-              <span className="font-serif-italic text-ankit-gradient">Empower and Equip</span> creators to recreate and build without boundaries
-            </p>
+            <div className="glass-card glass-card-hover p-6 rounded-2xl text-left space-y-2.5">
+              <div className="h-10 w-10 rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-400 flex items-center justify-center">
+                <Palette className="h-5 w-5" />
+              </div>
+              <h4 className="text-base font-bold text-white">Auto Tailwind Config</h4>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Instantly extracts colors, typography stacks, and layout spacing into modern Tailwind v4 & v3 files.
+              </p>
+            </div>
 
-            <div className="flex items-center justify-center gap-4 pt-4">
-              <div className="h-px w-20 bg-gradient-to-r from-transparent via-blue-500/40 to-blue-500/80" />
-              <span className="h-2 w-2 rounded-full bg-blue-400 shadow-[0_0_10px_#60a5fa] animate-pulse" />
-              <div className="h-px w-20 bg-gradient-to-l from-transparent via-blue-500/40 to-blue-500/80" />
+            <div className="glass-card glass-card-hover p-6 rounded-2xl text-left space-y-2.5">
+              <div className="h-10 w-10 rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-400 flex items-center justify-center">
+                <FolderArchive className="h-5 w-5" />
+              </div>
+              <h4 className="text-base font-bold text-white">100% Offline Asset Inliner</h4>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Resolves images, vector SVGs, and web fonts into a standalone ZIP package that runs without internet.
+              </p>
+            </div>
+
+            <div className="glass-card glass-card-hover p-6 rounded-2xl text-left space-y-2.5">
+              <div className="h-10 w-10 rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-400 flex items-center justify-center">
+                <Cpu className="h-5 w-5" />
+              </div>
+              <h4 className="text-base font-bold text-white">Native 60 FPS Motion</h4>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Eliminates laggy wheel interceptors so all scrolling reveals and keyframe animations run buttery smooth.
+              </p>
             </div>
           </div>
         </section>
@@ -192,7 +220,7 @@ export default function App() {
         {/* Moving Marquee Banner */}
         <MarqueeBanner />
 
-        {/* Bento Tools Grid */}
+        {/* Bento Capabilities Grid */}
         <ToolsBento />
 
         {/* Dashboard Showcase Section with Floating Badges */}
@@ -201,15 +229,15 @@ export default function App() {
         {/* Personas / Solutions Section */}
         <PersonasSection />
 
-        {/* 3 Simple Steps */}
-        <section className="py-20 border-y border-white/[0.06] bg-[#030612]/60">
+        {/* 3 Simple Steps Workflow */}
+        <section id="workflow-section" className="py-20 border-y border-white/[0.06] bg-[#030612]/60">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 space-y-12">
             <div className="text-center space-y-3">
               <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-1 text-xs font-semibold text-blue-300 backdrop-blur-md">
                 <span>Fast & Frictionless</span>
               </div>
               <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
-                Reconstruct in <span className="font-serif-italic text-ankit-gradient">3 Seamless Steps</span>
+                Reconstruct Any Page in <span className="text-gradient-electric">3 Simple Steps</span>
               </h2>
               <p className="text-sm text-slate-400 max-w-xl mx-auto font-normal">
                 No complex browser plugins or scrapers needed. Instant full-page reproduction in seconds.
@@ -221,9 +249,9 @@ export default function App() {
                 <div className="h-12 w-12 rounded-xl btn-zippix-primary text-white font-bold text-lg flex items-center justify-center mx-auto">
                   1
                 </div>
-                <h3 className="text-lg font-bold text-white">Enter Target URL</h3>
+                <h3 className="text-lg font-bold text-white">Provide Target URL</h3>
                 <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                  Provide the URL of any authorized webpage you wish to reconstruct, and choose your preferred
+                  Enter the URL of any authorized webpage you wish to reconstruct, and choose your preferred
                   extraction depth.
                 </p>
               </div>
@@ -264,10 +292,10 @@ export default function App() {
           <div className="glass-card rounded-3xl p-8 sm:p-14 space-y-6 text-center relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-b from-blue-600/10 via-transparent to-transparent pointer-events-none" />
             <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
-              Ready to Reconstruct Your <span className="font-serif-italic text-ankit-gradient">First Website</span>?
+              Ready to Reconstruct Your <span className="text-gradient-electric">First Webpage</span>?
             </h2>
             <p className="text-sm text-slate-400 max-w-xl mx-auto leading-relaxed">
-              Join thousands of developers, agencies, and web creators deconstructing and migrating websites with
+              Join thousands of developers, designers, and web creators deconstructing and migrating websites with
               Zippix.
             </p>
             <div className="pt-2">

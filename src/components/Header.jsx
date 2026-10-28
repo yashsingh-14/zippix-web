@@ -72,11 +72,10 @@ export const Header = ({
               Architecture
             </button>
             <button
-              onClick={() => scrollToSection('vision-section')}
-              className="text-slate-300 hover:text-white transition duration-200 flex items-center gap-1"
+              onClick={() => scrollToSection('workflow-section')}
+              className="text-slate-300 hover:text-white transition duration-200"
             >
-              <span>Vision</span>
-              <span className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse" />
+              How It Works
             </button>
             <button
               onClick={() => scrollToSection('faq-section')}
@@ -152,10 +151,10 @@ export const Header = ({
             Architecture
           </button>
           <button
-            onClick={() => scrollToSection('vision-section')}
+            onClick={() => scrollToSection('workflow-section')}
             className="block w-full text-left py-2 text-base font-medium text-slate-200 hover:text-blue-400"
           >
-            Vision
+            How It Works
           </button>
           <button
             onClick={() => scrollToSection('faq-section')}

@@ -3,45 +3,38 @@
 @layer base {
   body {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: #020408;
+    background-color: #030509;
     color: #f1f5f9;
   }
 }
 
-/* Ankit Sajwan Inspired Typography */
-.font-serif-italic {
-  font-family: 'Instrument Serif', Georgia, serif;
-  font-style: italic;
-  letter-spacing: 0.01em;
-}
-
-/* Ankit Sajwan Signature Celestial Gradient */
-.text-ankit-gradient {
-  background: linear-gradient(135deg, #60a5fa 0%, #93c5fd 45%, #ffffff 90%);
+/* Zippix Signature Electric Gradient */
+.text-gradient-electric {
+  background: linear-gradient(135deg, #60a5fa 0%, #93c5fd 40%, #ffffff 90%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Atmospheric Cosmic Blue Light Gradient */
-.text-cyan-glow-gradient {
+/* Cyan to Purple Accent Gradient */
+.text-gradient-cyan {
   background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Velvet Obsidian Canvas with Celestial Side Glow (Directly matching Ankit Sajwan screenshot) */
-.ankit-canvas {
+/* Deep Obsidian Canvas with Celestial Blue Flank Lighting */
+.zippix-canvas {
   background-color: #020408;
   background-image: 
-    radial-gradient(ellipse 65% 55% at 0% 25%, rgba(30, 64, 175, 0.32) 0%, transparent 60%),
-    radial-gradient(ellipse 55% 55% at 100% 45%, rgba(29, 78, 216, 0.25) 0%, transparent 60%),
-    radial-gradient(ellipse 80% 40% at 50% -10%, rgba(37, 99, 235, 0.28) 0%, transparent 70%);
+    radial-gradient(ellipse 65% 55% at 0% 20%, rgba(30, 64, 175, 0.3) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 55% at 100% 40%, rgba(29, 78, 216, 0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 40% at 50% -10%, rgba(37, 99, 235, 0.25) 0%, transparent 70%);
   background-attachment: fixed;
 }
 
-/* Premium Dark Glass Card */
+/* Modern Dark Glassmorphism Cards */
 .glass-card {
-  background: rgba(7, 12, 26, 0.65);
+  background: rgba(7, 12, 26, 0.7);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -63,7 +56,7 @@
   transform: translateY(-2px);
 }
 
-/* Celestial Royal Button */
+/* Primary Electric Blue Button */
 .btn-zippix-primary {
   background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   color: #ffffff;
@@ -89,7 +82,7 @@
   transform: translateY(0px) scale(0.98);
 }
 
-/* Glass Outline Secondary Button */
+/* Secondary Translucent Button */
 .btn-zippix-secondary {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -105,7 +98,7 @@
   transform: translateY(-1px);
 }
 
-/* Custom Sleek Scrollbar */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -121,7 +114,7 @@
   background: rgba(96, 165, 250, 0.5);
 }
 
-/* Infinite Marquee Track */
+/* Infinite Marquee Animation */
 @keyframes marquee {
   0% { transform: translateX(0%); }
   100% { transform: translateX(-50%); }
@@ -130,14 +123,14 @@
 .animate-marquee {
   display: flex;
   width: max-content;
-  animation: marquee 32s linear infinite;
+  animation: marquee 30s linear infinite;
 }
 
 .animate-marquee:hover {
   animation-play-state: paused;
 }
 
-/* Floating Badges Animation */
+/* Subtle Floating Animation */
 @keyframes floatBadge {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-6px); }

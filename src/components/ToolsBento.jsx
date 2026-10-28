@@ -22,7 +22,7 @@ export const ToolsBento = () => {
         </div>
 
         <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
-          Engineered for <span className="font-serif-italic text-ankit-gradient">Absolute Precision</span>
+          Engineered for <span className="text-gradient-electric">Absolute Precision</span>
         </h2>
         <p className="text-sm sm:text-base text-slate-400 leading-relaxed font-normal">
           Beyond a simple scraper — Zippix operates a complete headless browser runtime to render, extract, and
