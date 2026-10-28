@@ -192,11 +192,62 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
         .querySelectorAll('script[src*="googlesyndication"], ins.adsbygoogle, iframe[src*="google"]')
         .forEach((el) => el.remove());
 
+      // Guarantee Native Scrolling on <html>, <body>, and full-page wrappers
+      docClone.style.overflow = '';
+      docClone.style.overflowX = 'hidden';
+      docClone.style.overflowY = 'auto';
+      docClone.style.height = 'auto';
+      docClone.style.maxHeight = 'none';
+      docClone.style.position = 'static';
+      docClone.classList.remove('overflow-hidden', 'overflow-y-hidden', 'no-scroll', 'lenis-stopped', 'has-scroll-smooth', 'noscroll');
+
+      const bodyClone = docClone.querySelector('body');
+      if (bodyClone) {
+        bodyClone.style.overflow = '';
+        bodyClone.style.overflowX = 'hidden';
+        bodyClone.style.overflowY = 'auto';
+        bodyClone.style.height = 'auto';
+        bodyClone.style.minHeight = '100vh';
+        bodyClone.style.maxHeight = 'none';
+        bodyClone.style.position = 'static';
+        bodyClone.classList.remove('overflow-hidden', 'overflow-y-hidden', 'no-scroll', 'lenis-stopped', 'has-scroll-smooth', 'noscroll');
+      }
+
+      // Unblock potential full-screen fixed container locks (like #__next, #root, .smooth-wrapper)
+      docClone.querySelectorAll('#__next, #root, #app, [data-scroll-container], .smooth-wrapper, .smooth-content, .lenis').forEach((el) => {
+        el.style.overflow = 'visible';
+        el.style.height = 'auto';
+        el.style.maxHeight = 'none';
+        el.style.position = 'static';
+        el.classList.remove('overflow-hidden', 'lenis-stopped');
+      });
+
       // 4. Inject Master Animation Stylesheet
       const masterStyles = `
 /* ==========================================================================
    Zippix Ultra High-Fidelity Scroll & Motion FX Engine v5.0
    ========================================================================== */
+html {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  height: auto !important;
+  min-height: 100% !important;
+  scroll-behavior: smooth !important;
+}
+body {
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  position: static !important;
+  touch-action: auto !important;
+}
+#__next, #root, #app, [data-scroll-container], .smooth-wrapper, .smooth-content, .main-wrapper {
+  overflow: visible !important;
+  height: auto !important;
+  max-height: none !important;
+  position: static !important;
+}
 html.lenis, html.lenis body {
   height: auto;
 }
@@ -296,6 +347,24 @@ html.lenis, html.lenis body {
       runtimeScript.setAttribute('id', 'zippix-client-runtime-v5');
       runtimeScript.textContent = `
 (function() {
+  // Guarantee Native Scrolling on all environments
+  function ensureScrollable() {
+    try {
+      document.documentElement.style.setProperty('overflow-y', 'auto', 'important');
+      document.documentElement.style.setProperty('height', 'auto', 'important');
+      document.body.style.setProperty('overflow-y', 'auto', 'important');
+      document.body.style.setProperty('height', 'auto', 'important');
+      document.body.style.setProperty('position', 'static', 'important');
+      document.documentElement.classList.remove('overflow-hidden', 'lenis-stopped', 'has-scroll-smooth', 'no-scroll');
+      document.body.classList.remove('overflow-hidden', 'lenis-stopped', 'has-scroll-smooth', 'no-scroll');
+    } catch(e) {}
+  }
+  ensureScrollable();
+  window.addEventListener('DOMContentLoaded', ensureScrollable);
+  window.addEventListener('load', ensureScrollable);
+  setTimeout(ensureScrollable, 300);
+  setTimeout(ensureScrollable, 1200);
+
   // 1. Dynamic Navbar Scrolled Transition
   function initNavbar() {
     var nav = document.querySelector('nav, header');

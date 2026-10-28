@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header.jsx';
 import { UrlInputBar } from './components/UrlInputBar.jsx';
 import { TechStackTicker } from './components/TechStackTicker.jsx';
@@ -11,6 +11,7 @@ import { FaqSection } from './components/FaqSection.jsx';
 import { BottomTerminalCta } from './components/BottomTerminalCta.jsx';
 import { CloneProgress } from './components/CloneProgress.jsx';
 import { CloneDashboard } from './components/CloneDashboard.jsx';
+import { AuthModal } from './components/AuthModal.jsx';
 import { ProUpgradeModal } from './components/ProUpgradeModal.jsx';
 import { AboutModal } from './components/AboutModal.jsx';
 import { PrivacyModal } from './components/PrivacyModal.jsx';
@@ -24,7 +25,18 @@ export default function App() {
   const [cloneData, setCloneData] = useState(null);
   const [error, setError] = useState(null);
 
+  // Auth state management
+  const [user, setUser] = useState(() => {
+    try {
+      const stored = localStorage.getItem('zippix_user');
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  });
+
   // Modals state
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isProModalOpen, setIsProModalOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
@@ -55,11 +67,20 @@ export default function App() {
     localStorage.setItem('zippix_web_is_pro', 'true');
   };
 
+  const handleAuthSuccess = (authenticatedUser) => {
+    setUser(authenticatedUser);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('zippix_user');
+    setUser(null);
+  };
+
   const handleClone = async (targetUrl, depth = 'standard') => {
     setError(null);
 
-    if (!isPro && !isLocalEnv && freeClonesRemaining <= 0) {
-      setIsProModalOpen(true);
+    if (!isPro && !isLocalEnv && freeClonesRemaining <= 0 && !user) {
+      setIsAuthOpen(true);
       return;
     }
 
@@ -99,13 +120,32 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen flex flex-col zippix-canvas text-slate-100 overflow-x-hidden selection:bg-blue-500/30 selection:text-blue-200">
+      {/* SVG Gooey Liquid Filter for Skilluno Ferrofluid Effect */}
+      <svg width="0" height="0" className="absolute pointer-events-none" style={{ position: 'absolute' }}>
+        <filter id="ferrofluid">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="24" result="blur" />
+          <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 32 -10" result="goo" />
+          <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+        </filter>
+      </svg>
+
+      {/* Ferrofluid Liquid Morphing Hero Background (from Skilluno) */}
+      <div className="ferrofluid-canvas">
+        <div className="globule globule-1" />
+        <div className="globule globule-2" />
+        <div className="globule globule-3" />
+      </div>
+
       {/* Signature Atmospheric Side Glow Auras */}
       <div className="fixed top-24 -left-48 w-[650px] h-[650px] rounded-full bg-blue-600/20 blur-[160px] pointer-events-none -z-10" />
       <div className="fixed top-[40%] -right-48 w-[550px] h-[550px] rounded-full bg-indigo-600/20 blur-[170px] pointer-events-none -z-10" />
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[900px] h-[350px] rounded-full bg-blue-500/10 blur-[140px] pointer-events-none -z-10" />
 
-      {/* Navigation Header */}
+      {/* Apple Glassmorphism Header */}
       <Header
+        user={user}
+        onOpenAuth={() => setIsAuthOpen(true)}
+        onLogout={handleLogout}
         isPro={isPro}
         freeClonesRemaining={freeClonesRemaining}
         onOpenProModal={() => setIsProModalOpen(true)}
@@ -115,11 +155,11 @@ export default function App() {
       />
 
       {/* Main Experience Body */}
-      <main className="flex-1 w-full space-y-20">
+      <main className="flex-1 w-full space-y-20 relative z-10">
         {/* Hero Section */}
-        <section id="cloner-section" className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center pt-12 sm:pt-20 space-y-7">
-          {/* Announcement Badge */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-1.5 text-xs font-semibold text-blue-300 backdrop-blur-md shadow-sm">
+        <section id="cloner-section" className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center pt-14 sm:pt-22 space-y-7 relative">
+          {/* Announcement Badge with Apple Glassmorphism */}
+          <div className="inline-flex items-center gap-2 rounded-full apple-glass-pill px-4 py-1.5 text-xs font-semibold text-blue-300 shadow-sm">
             <Sparkles className="h-3.5 w-3.5 text-blue-400" />
             <span>Zippix Cloud Engine v2.0 • Headless Web Reconstructor</span>
           </div>
@@ -144,7 +184,7 @@ export default function App() {
 
           {/* Error Banner */}
           {error && (
-            <div className="mx-auto max-w-xl rounded-xl border border-red-500/40 bg-red-950/40 p-4 text-xs text-red-200 text-center backdrop-blur-md">
+            <div className="mx-auto max-w-xl rounded-2xl border border-red-500/40 bg-red-950/40 p-4 text-xs text-red-200 text-center backdrop-blur-md">
               {error}
             </div>
           )}
@@ -189,8 +229,8 @@ export default function App() {
         <BottomTerminalCta onLaunchUrl={(target) => handleClone(target, 'standard')} />
       </main>
 
-      {/* Engineering Footer */}
-      <footer className="border-t border-white/[0.08] py-12 bg-[#020408]/95 text-slate-400">
+      {/* Engineering Footer with Apple Glassmorphism */}
+      <footer className="border-t border-white/[0.08] py-12 bg-[#020408]/95 text-slate-400 relative z-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-white/[0.06]">
             <div className="flex items-center gap-3">
@@ -226,6 +266,13 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* Authentication Modal */}
+      <AuthModal
+        isOpen={isAuthOpen}
+        onClose={() => setIsAuthOpen(false)}
+        onAuthSuccess={handleAuthSuccess}
+      />
 
       {/* Legal & Pro Modals */}
       <ProUpgradeModal

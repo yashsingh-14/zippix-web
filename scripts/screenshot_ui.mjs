@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer-core';
 import { getAvailableBrowserPath } from '../server/cloner/browser.js';
 
-async function screenshotAllSections() {
+async function screenshotNewFeatures() {
   const executablePath = getAvailableBrowserPath();
   const browser = await puppeteer.launch({
     executablePath,
@@ -14,43 +14,20 @@ async function screenshotAllSections() {
   await page.goto('http://localhost:3000', { waitUntil: 'networkidle2' });
   await new Promise(r => setTimeout(r, 1200));
 
-  // 1. Hero
-  await page.screenshot({ path: 'scripts/debug_output/section_1_hero.png', fullPage: false });
+  // 1. Hero with Skilluno Ferrofluid & Apple Glass
+  await page.screenshot({ path: 'scripts/debug_output/hero_with_ferrofluid.png', fullPage: false });
 
-  // 2. Engine Matrix
+  // 2. Open Auth Modal by clicking Sign In button
   await page.evaluate(() => {
-    const el = document.getElementById('engine-matrix');
-    if (el) el.scrollIntoView({ behavior: 'instant' });
+    const buttons = Array.from(document.querySelectorAll('button'));
+    const signInBtn = buttons.find(b => b.textContent.includes('Sign In'));
+    if (signInBtn) signInBtn.click();
   });
-  await new Promise(r => setTimeout(r, 700));
-  await page.screenshot({ path: 'scripts/debug_output/section_2_matrix.png', fullPage: false });
-
-  // 3. Studio Playground
-  await page.evaluate(() => {
-    const el = document.getElementById('studio-playground');
-    if (el) el.scrollIntoView({ behavior: 'instant' });
-  });
-  await new Promise(r => setTimeout(r, 700));
-  await page.screenshot({ path: 'scripts/debug_output/section_3_studio.png', fullPage: false });
-
-  // 4. Workflow Pipelines
-  await page.evaluate(() => {
-    const el = document.getElementById('workflow-pipelines');
-    if (el) el.scrollIntoView({ behavior: 'instant' });
-  });
-  await new Promise(r => setTimeout(r, 700));
-  await page.screenshot({ path: 'scripts/debug_output/section_4_pipelines.png', fullPage: false });
-
-  // 5. 3-Phase Lifecycle
-  await page.evaluate(() => {
-    const el = document.getElementById('pipeline-stages');
-    if (el) el.scrollIntoView({ behavior: 'instant' });
-  });
-  await new Promise(r => setTimeout(r, 700));
-  await page.screenshot({ path: 'scripts/debug_output/section_5_lifecycle.png', fullPage: false });
+  await new Promise(r => setTimeout(r, 600));
+  await page.screenshot({ path: 'scripts/debug_output/auth_modal_login.png', fullPage: false });
 
   await browser.close();
-  console.log('All sections captured successfully');
+  console.log('Ferrofluid and Auth screenshots saved successfully');
 }
 
-screenshotAllSections();
+screenshotNewFeatures();

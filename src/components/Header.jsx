@@ -1,15 +1,29 @@
 import React, { useState } from 'react';
-import { Terminal, Rocket, Menu, X, ShieldCheck, Zap } from 'lucide-react';
+import {
+  Terminal,
+  Rocket,
+  Menu,
+  X,
+  ShieldCheck,
+  Zap,
+  User,
+  LogOut,
+  ChevronDown,
+  Sparkles,
+  Key,
+} from 'lucide-react';
 
 export const Header = ({
-  isPro,
-  freeClonesRemaining,
+  user,
+  onOpenAuth,
+  onLogout,
   onOpenProModal,
   onOpenAbout,
   onOpenPrivacy,
   onOpenContact,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
   const scrollTo = (id) => {
     setMobileMenuOpen(false);
@@ -18,7 +32,7 @@ export const Header = ({
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#020408]/85 backdrop-blur-2xl border-b border-white/[0.07] transition-all">
+    <header className="sticky top-0 z-50 w-full apple-glass-nav transition-all">
       <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand & Live System Status */}
         <div className="flex items-center gap-6">
@@ -27,7 +41,7 @@ export const Header = ({
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
             <div className="relative">
-              <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-600 opacity-40 blur group-hover:opacity-80 transition duration-300" />
+              <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-blue-600 via-sky-400 to-indigo-600 opacity-40 blur group-hover:opacity-90 transition duration-300" />
               <img
                 src="/logo.svg"
                 alt="Zippix"
@@ -40,7 +54,7 @@ export const Header = ({
                   Zippix
                 </span>
                 <span className="text-[10px] font-mono tracking-widest uppercase bg-blue-500/15 text-blue-300 border border-blue-500/30 px-2 py-0.5 rounded-full font-bold">
-                  Engine v2.0
+                  v2.0
                 </span>
               </div>
             </div>
@@ -87,28 +101,90 @@ export const Header = ({
           </button>
         </nav>
 
-        {/* Action Area */}
+        {/* Right Action & Auth Area */}
         <div className="flex items-center gap-3">
-          {/* Pro Pill Badge */}
-          {isPro ? (
-            <div
-              onClick={onOpenProModal}
-              className="cursor-pointer hidden sm:flex items-center gap-2 rounded-full bg-blue-500/10 border border-blue-500/30 px-3.5 py-1.5 text-xs font-semibold text-blue-300 backdrop-blur-md shadow-sm hover:border-blue-400 transition"
-            >
-              <Zap className="h-3 w-3 text-blue-400" />
-              <span>Unlimited Access</span>
+          {/* User Logged In State vs Logged Out State */}
+          {user ? (
+            <div className="relative">
+              <button
+                onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                className="flex items-center gap-2.5 rounded-full p-1 sm:pr-3.5 apple-glass-pill hover:border-blue-400/50 transition"
+              >
+                <img
+                  src={user.avatar || '/logo.svg'}
+                  alt={user.name}
+                  className="h-8 w-8 rounded-full border border-white/20 bg-blue-950 object-cover"
+                />
+                <div className="text-left hidden sm:block">
+                  <p className="text-xs font-bold text-white leading-tight">{user.name}</p>
+                  <p className="text-[10px] text-blue-400 font-mono leading-none">PRO DEV</p>
+                </div>
+                <ChevronDown className="h-3.5 w-3.5 text-slate-400 hidden sm:block" />
+              </button>
+
+              {/* User Dropdown Menu */}
+              {userDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-56 apple-glass-modal rounded-2xl p-2 shadow-2xl border border-white/15 z-50 text-xs">
+                  <div className="px-3 py-2 border-b border-white/[0.08] mb-1">
+                    <p className="font-bold text-white truncate">{user.name}</p>
+                    <p className="text-[11px] text-slate-400 truncate">{user.email}</p>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setUserDropdownOpen(false);
+                      onOpenProModal();
+                    }}
+                    className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 transition text-left"
+                  >
+                    <Zap className="h-3.5 w-3.5 text-blue-400" />
+                    <span>Unlimited Pro Plan</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setUserDropdownOpen(false);
+                      scrollTo('studio-playground');
+                    }}
+                    className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 transition text-left"
+                  >
+                    <Terminal className="h-3.5 w-3.5 text-sky-400" />
+                    <span>My Studio Workspace</span>
+                  </button>
+
+                  <div className="h-px bg-white/[0.08] my-1" />
+
+                  <button
+                    onClick={() => {
+                      setUserDropdownOpen(false);
+                      onLogout();
+                    }}
+                    className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-red-400 hover:bg-red-500/10 transition text-left"
+                  >
+                    <LogOut className="h-3.5 w-3.5" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
-            <button
-              onClick={onOpenProModal}
-              className="hidden sm:flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs font-medium text-slate-300 hover:bg-white/10 transition"
-            >
-              <span>Free Runs:</span>
-              <strong className="text-blue-400 font-bold">{freeClonesRemaining}</strong>
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={onOpenAuth}
+                className="hidden sm:inline-flex px-3.5 py-2 text-xs font-semibold text-slate-300 hover:text-white transition"
+              >
+                Sign In
+              </button>
+              <button
+                onClick={onOpenAuth}
+                className="btn-zippix-secondary rounded-xl px-4 py-2 text-xs font-semibold hidden sm:inline-flex items-center gap-1.5"
+              >
+                <span>Create Account</span>
+              </button>
+            </div>
           )}
 
-          {/* Launch Button */}
+          {/* Start Extraction Action Button */}
           <button
             onClick={() => {
               const el = document.getElementById('reconstructor-console');
@@ -117,7 +193,7 @@ export const Header = ({
             className="btn-zippix-primary rounded-xl px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-bold flex items-center gap-2"
           >
             <Rocket className="h-4 w-4" />
-            <span>Start Extraction</span>
+            <span>Launch Engine</span>
           </button>
 
           {/* Mobile Menu */}
@@ -165,12 +241,33 @@ export const Header = ({
           </button>
 
           <div className="pt-4 border-t border-white/10 flex flex-col gap-2.5">
+            {!user ? (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenAuth();
+                }}
+                className="w-full btn-zippix-primary py-2.5 rounded-xl text-xs font-bold text-center"
+              >
+                Sign In / Sign Up
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onLogout();
+                }}
+                className="text-left text-xs text-red-400 hover:text-red-300 py-1"
+              >
+                Sign Out ({user.email})
+              </button>
+            )}
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 onOpenAbout();
               }}
-              className="text-left text-sm text-slate-400 hover:text-slate-200"
+              className="text-left text-xs text-slate-400 hover:text-slate-200"
             >
               About Zippix
             </button>
@@ -179,7 +276,7 @@ export const Header = ({
                 setMobileMenuOpen(false);
                 onOpenPrivacy();
               }}
-              className="text-left text-sm text-slate-400 hover:text-slate-200"
+              className="text-left text-xs text-slate-400 hover:text-slate-200"
             >
               Privacy Policy
             </button>
@@ -188,7 +285,7 @@ export const Header = ({
                 setMobileMenuOpen(false);
                 onOpenContact();
               }}
-              className="text-left text-sm text-slate-400 hover:text-slate-200"
+              className="text-left text-xs text-slate-400 hover:text-slate-200"
             >
               Contact Support
             </button>
