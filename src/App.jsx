@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Header } from './components/Header.jsx';
 import { UrlInputBar } from './components/UrlInputBar.jsx';
-import { MarqueeBanner } from './components/MarqueeBanner.jsx';
-import { ToolsBento } from './components/ToolsBento.jsx';
-import { DashboardShowcase } from './components/DashboardShowcase.jsx';
-import { PersonasSection } from './components/PersonasSection.jsx';
-import { TestimonialsSection } from './components/TestimonialsSection.jsx';
+import { TechStackTicker } from './components/TechStackTicker.jsx';
+import { EngineMatrix } from './components/EngineMatrix.jsx';
+import { StudioPlayground } from './components/StudioPlayground.jsx';
+import { WorkflowPipelines } from './components/WorkflowPipelines.jsx';
+import { CloudPipelineSteps } from './components/CloudPipelineSteps.jsx';
+import { EngineeringBenchmarks } from './components/EngineeringBenchmarks.jsx';
 import { FaqSection } from './components/FaqSection.jsx';
+import { BottomTerminalCta } from './components/BottomTerminalCta.jsx';
 import { CloneProgress } from './components/CloneProgress.jsx';
 import { CloneDashboard } from './components/CloneDashboard.jsx';
 import { ProUpgradeModal } from './components/ProUpgradeModal.jsx';
@@ -14,17 +16,7 @@ import { AboutModal } from './components/AboutModal.jsx';
 import { PrivacyModal } from './components/PrivacyModal.jsx';
 import { TermsModal } from './components/TermsModal.jsx';
 import { ContactModal } from './components/ContactModal.jsx';
-import {
-  Sparkles,
-  Rocket,
-  Zap,
-  Palette,
-  FolderArchive,
-  Cpu,
-  Layers,
-  ArrowRight,
-  ShieldCheck,
-} from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 export default function App() {
   const [url, setUrl] = useState('');
@@ -112,7 +104,7 @@ export default function App() {
       <div className="fixed top-[40%] -right-48 w-[550px] h-[550px] rounded-full bg-indigo-600/20 blur-[170px] pointer-events-none -z-10" />
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[900px] h-[350px] rounded-full bg-blue-500/10 blur-[140px] pointer-events-none -z-10" />
 
-      {/* Header */}
+      {/* Navigation Header */}
       <Header
         isPro={isPro}
         freeClonesRemaining={freeClonesRemaining}
@@ -122,7 +114,7 @@ export default function App() {
         onOpenContact={() => setIsContactOpen(true)}
       />
 
-      {/* Main Body */}
+      {/* Main Experience Body */}
       <main className="flex-1 w-full space-y-20">
         {/* Hero Section */}
         <section id="cloner-section" className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center pt-12 sm:pt-20 space-y-7">
@@ -145,7 +137,7 @@ export default function App() {
             and self-contained offline media in single-click headless execution.
           </p>
 
-          {/* Input Capsule Card */}
+          {/* Reconstructor Command Console */}
           <div className="pt-2">
             <UrlInputBar onClone={handleClone} isLoading={isLoading} />
           </div>
@@ -158,7 +150,7 @@ export default function App() {
           )}
         </section>
 
-        {/* Cloning Progress Tracker */}
+        {/* Live Cloning Progress Tracker */}
         {isLoading && (
           <div className="mx-auto max-w-4xl px-4">
             <CloneProgress url={url} />
@@ -172,169 +164,65 @@ export default function App() {
           </div>
         )}
 
-        {/* Zippix Architecture Highlights & Performance Metrics */}
-        <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="glass-card glass-card-hover p-6 rounded-2xl text-left space-y-2.5">
-              <div className="h-10 w-10 rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-400 flex items-center justify-center">
-                <Zap className="h-5 w-5" />
-              </div>
-              <h4 className="text-base font-bold text-white">Sub-12s Cloud Virtualization</h4>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Headless Chromium runtime parses full React/Next.js hydration trees and CSS layouts in seconds.
-              </p>
-            </div>
+        {/* Engineering Specifications Ticker */}
+        <TechStackTicker />
 
-            <div className="glass-card glass-card-hover p-6 rounded-2xl text-left space-y-2.5">
-              <div className="h-10 w-10 rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-400 flex items-center justify-center">
-                <Palette className="h-5 w-5" />
-              </div>
-              <h4 className="text-base font-bold text-white">Auto Tailwind Config</h4>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Instantly extracts colors, typography stacks, and layout spacing into modern Tailwind v4 & v3 files.
-              </p>
-            </div>
+        {/* Interactive Engine Capabilities Matrix */}
+        <EngineMatrix />
 
-            <div className="glass-card glass-card-hover p-6 rounded-2xl text-left space-y-2.5">
-              <div className="h-10 w-10 rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-400 flex items-center justify-center">
-                <FolderArchive className="h-5 w-5" />
-              </div>
-              <h4 className="text-base font-bold text-white">100% Offline Asset Inliner</h4>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Resolves images, vector SVGs, and web fonts into a standalone ZIP package that runs without internet.
-              </p>
-            </div>
+        {/* Interactive Studio Playground & Viewport Sandbox */}
+        <StudioPlayground />
 
-            <div className="glass-card glass-card-hover p-6 rounded-2xl text-left space-y-2.5">
-              <div className="h-10 w-10 rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-400 flex items-center justify-center">
-                <Cpu className="h-5 w-5" />
-              </div>
-              <h4 className="text-base font-bold text-white">Native 60 FPS Motion</h4>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Eliminates laggy wheel interceptors so all scrolling reveals and keyframe animations run buttery smooth.
-              </p>
-            </div>
-          </div>
-        </section>
+        {/* Real-World Production Pipelines */}
+        <WorkflowPipelines />
 
-        {/* Moving Marquee Banner */}
-        <MarqueeBanner />
+        {/* 3-Phase Reconstruction Lifecycle */}
+        <CloudPipelineSteps />
 
-        {/* Bento Capabilities Grid */}
-        <ToolsBento />
+        {/* Engineering Benchmarks & Feedback */}
+        <EngineeringBenchmarks />
 
-        {/* Dashboard Showcase Section with Floating Badges */}
-        <DashboardShowcase />
-
-        {/* Personas / Solutions Section */}
-        <PersonasSection />
-
-        {/* 3 Simple Steps Workflow */}
-        <section id="workflow-section" className="py-20 border-y border-white/[0.06] bg-[#030612]/60">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 space-y-12">
-            <div className="text-center space-y-3">
-              <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-1 text-xs font-semibold text-blue-300 backdrop-blur-md">
-                <span>Fast & Frictionless</span>
-              </div>
-              <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
-                Reconstruct Any Page in <span className="text-gradient-electric">3 Simple Steps</span>
-              </h2>
-              <p className="text-sm text-slate-400 max-w-xl mx-auto font-normal">
-                No complex browser plugins or scrapers needed. Instant full-page reproduction in seconds.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="glass-card glass-card-hover p-8 rounded-2xl text-center space-y-4">
-                <div className="h-12 w-12 rounded-xl btn-zippix-primary text-white font-bold text-lg flex items-center justify-center mx-auto">
-                  1
-                </div>
-                <h3 className="text-lg font-bold text-white">Provide Target URL</h3>
-                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                  Enter the URL of any authorized webpage you wish to reconstruct, and choose your preferred
-                  extraction depth.
-                </p>
-              </div>
-
-              <div className="glass-card glass-card-hover p-8 rounded-2xl text-center space-y-4">
-                <div className="h-12 w-12 rounded-xl btn-zippix-primary text-white font-bold text-lg flex items-center justify-center mx-auto">
-                  2
-                </div>
-                <h3 className="text-lg font-bold text-white">Headless Virtualization</h3>
-                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                  Our cloud Chromium engine executes JavaScript, resolves React hydrations, and preserves interactive
-                  motion layers.
-                </p>
-              </div>
-
-              <div className="glass-card glass-card-hover p-8 rounded-2xl text-center space-y-4">
-                <div className="h-12 w-12 rounded-xl btn-zippix-primary text-white font-bold text-lg flex items-center justify-center mx-auto">
-                  3
-                </div>
-                <h3 className="text-lg font-bold text-white">Export Code & ZIP</h3>
-                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                  Instantly download your standalone ZIP bundle containing index.html, Tailwind v4 theme, and all media
-                  assets.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Testimonials */}
-        <TestimonialsSection />
-
-        {/* FAQs */}
+        {/* Technical FAQ */}
         <FaqSection />
 
-        {/* Bottom Call to Action */}
-        <section className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-20 text-center">
-          <div className="glass-card rounded-3xl p-8 sm:p-14 space-y-6 text-center relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-b from-blue-600/10 via-transparent to-transparent pointer-events-none" />
-            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
-              Ready to Reconstruct Your <span className="text-gradient-electric">First Webpage</span>?
-            </h2>
-            <p className="text-sm text-slate-400 max-w-xl mx-auto leading-relaxed">
-              Join thousands of developers, designers, and web creators deconstructing and migrating websites with
-              Zippix.
-            </p>
-            <div className="pt-2">
-              <button
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                className="btn-zippix-primary rounded-xl px-8 py-4 text-sm font-semibold inline-flex items-center gap-2.5 shadow-xl"
-              >
-                <Rocket className="h-4 w-4" />
-                <span>Launch Cloner Free</span>
+        {/* Cyber Bottom Terminal Launchpad */}
+        <BottomTerminalCta onLaunchUrl={(target) => handleClone(target, 'standard')} />
+      </main>
+
+      {/* Engineering Footer */}
+      <footer className="border-t border-white/[0.08] py-12 bg-[#020408]/95 text-slate-400">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-white/[0.06]">
+            <div className="flex items-center gap-3">
+              <img src="/logo.svg" alt="Zippix Logo" className="h-8 w-8 object-contain" />
+              <div>
+                <span className="font-bold text-white text-base">Zippix</span>
+                <span className="text-xs text-slate-500 block">AI Web Reconstruction Engine</span>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-6 text-xs font-medium">
+              <button onClick={() => setIsPrivacyOpen(true)} className="hover:text-blue-400 transition">
+                Privacy Policy
+              </button>
+              <button onClick={() => setIsTermsOpen(true)} className="hover:text-blue-400 transition">
+                Terms of Use
+              </button>
+              <button onClick={() => setIsContactOpen(true)} className="hover:text-blue-400 transition">
+                Contact Support
+              </button>
+              <button onClick={() => setIsAboutOpen(true)} className="hover:text-blue-400 transition">
+                About Zippix
               </button>
             </div>
           </div>
-        </section>
-      </main>
 
-      {/* Footer */}
-      <footer className="border-t border-white/[0.08] py-10 bg-[#020408]/90 text-slate-400">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-xs">
-          <div className="flex items-center gap-3">
-            <img src="/logo.svg" alt="Zippix Logo" className="h-7 w-7 object-contain" />
-            <span className="font-bold text-white text-sm">Zippix</span>
-            <span className="text-slate-500">
-              © {new Date().getFullYear()} Zippix Cloud Technologies. All rights reserved.
-            </span>
-          </div>
-
-          <div className="flex items-center gap-6">
-            <button onClick={() => setIsPrivacyOpen(true)} className="hover:text-blue-400 transition">
-              Privacy Policy
-            </button>
-            <button onClick={() => setIsTermsOpen(true)} className="hover:text-blue-400 transition">
-              Terms of Use
-            </button>
-            <button onClick={() => setIsContactOpen(true)} className="hover:text-blue-400 transition">
-              Contact Support
-            </button>
-            <button onClick={() => setIsAboutOpen(true)} className="hover:text-blue-400 transition">
-              About Zippix
-            </button>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+            <span>© {new Date().getFullYear()} Zippix Cloud Technologies. All rights reserved.</span>
+            <div className="flex items-center gap-2 text-emerald-400 font-mono">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span>All Systems Operational</span>
+            </div>
           </div>
         </div>
       </footer>

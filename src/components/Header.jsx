@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, Rocket, Menu, X, Shield, Terminal, ArrowUpRight } from 'lucide-react';
+import { Terminal, Rocket, Menu, X, ShieldCheck, Zap } from 'lucide-react';
 
 export const Header = ({
   isPro,
@@ -11,115 +11,116 @@ export const Header = ({
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const scrollToSection = (id) => {
+  const scrollTo = (id) => {
     setMobileMenuOpen(false);
     const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#020408]/85 backdrop-blur-xl border-b border-white/[0.07] transition-all">
+    <header className="sticky top-0 z-50 w-full bg-[#020408]/85 backdrop-blur-2xl border-b border-white/[0.07] transition-all">
       <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Brand Logo & Title */}
-        <div className="flex items-center gap-3">
+        {/* Brand & Live System Status */}
+        <div className="flex items-center gap-6">
           <div
             className="flex items-center gap-3 cursor-pointer group"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
             <div className="relative">
-              <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 opacity-40 blur-sm group-hover:opacity-75 transition duration-300" />
+              <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-600 opacity-40 blur group-hover:opacity-80 transition duration-300" />
               <img
                 src="/logo.svg"
-                alt="Zippix Logo"
-                className="relative h-10 w-10 object-contain drop-shadow"
+                alt="Zippix"
+                className="relative h-9 w-9 object-contain drop-shadow"
               />
             </div>
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
-                <span className="text-xl font-bold tracking-tight text-white group-hover:text-blue-200 transition">
+                <span className="text-xl font-extrabold tracking-tight text-white group-hover:text-blue-300 transition">
                   Zippix
                 </span>
-                <span className="text-[10px] font-semibold tracking-wider uppercase bg-blue-500/15 text-blue-300 border border-blue-500/30 px-2 py-0.5 rounded-full">
-                  Cloud Engine
+                <span className="text-[10px] font-mono tracking-widest uppercase bg-blue-500/15 text-blue-300 border border-blue-500/30 px-2 py-0.5 rounded-full font-bold">
+                  Engine v2.0
                 </span>
               </div>
-              <span className="text-[11px] text-slate-400 font-normal hidden sm:inline">
-                AI Webpage Reconstruction
-              </span>
             </div>
           </div>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-7 ml-10 text-sm font-medium">
-            <button
-              onClick={() => scrollToSection('cloner-section')}
-              className="text-slate-300 hover:text-white transition duration-200"
-            >
-              Engine
-            </button>
-            <button
-              onClick={() => scrollToSection('tools-section')}
-              className="text-slate-300 hover:text-white transition duration-200"
-            >
-              Capabilities
-            </button>
-            <button
-              onClick={() => scrollToSection('dashboard-section')}
-              className="text-slate-300 hover:text-white transition duration-200"
-            >
-              Architecture
-            </button>
-            <button
-              onClick={() => scrollToSection('workflow-section')}
-              className="text-slate-300 hover:text-white transition duration-200"
-            >
-              How It Works
-            </button>
-            <button
-              onClick={() => scrollToSection('faq-section')}
-              className="text-slate-300 hover:text-white transition duration-200"
-            >
-              FAQ
-            </button>
-          </nav>
+          {/* Engine Live Status Dot */}
+          <div className="hidden xl:flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-[11px] font-mono text-emerald-400">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>Cloud Sandbox Active</span>
+          </div>
         </div>
 
-        {/* Right Action Controls */}
+        {/* Desktop Nav Links */}
+        <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
+          <button
+            onClick={() => scrollTo('reconstructor-console')}
+            className="text-slate-300 hover:text-white transition duration-200"
+          >
+            Console
+          </button>
+          <button
+            onClick={() => scrollTo('engine-matrix')}
+            className="text-slate-300 hover:text-white transition duration-200"
+          >
+            Capabilities
+          </button>
+          <button
+            onClick={() => scrollTo('studio-playground')}
+            className="text-slate-300 hover:text-white transition duration-200"
+          >
+            Studio
+          </button>
+          <button
+            onClick={() => scrollTo('workflow-pipelines')}
+            className="text-slate-300 hover:text-white transition duration-200"
+          >
+            Pipelines
+          </button>
+          <button
+            onClick={() => scrollTo('faq-section')}
+            className="text-slate-300 hover:text-white transition duration-200"
+          >
+            FAQ
+          </button>
+        </nav>
+
+        {/* Action Area */}
         <div className="flex items-center gap-3">
-          {/* Pro Status Badge */}
+          {/* Pro Pill Badge */}
           {isPro ? (
             <div
               onClick={onOpenProModal}
-              className="cursor-pointer hidden sm:flex items-center gap-2 rounded-full bg-blue-500/10 border border-blue-500/30 px-3.5 py-1.5 text-xs font-semibold text-blue-300 backdrop-blur-md shadow-sm hover:border-blue-500/50 transition"
+              className="cursor-pointer hidden sm:flex items-center gap-2 rounded-full bg-blue-500/10 border border-blue-500/30 px-3.5 py-1.5 text-xs font-semibold text-blue-300 backdrop-blur-md shadow-sm hover:border-blue-400 transition"
             >
-              <span className="h-2 w-2 rounded-full bg-blue-400 shadow-[0_0_8px_#60a5fa] animate-pulse" />
-              <span>Developer Pro</span>
+              <Zap className="h-3 w-3 text-blue-400" />
+              <span>Unlimited Access</span>
             </div>
           ) : (
             <button
               onClick={onOpenProModal}
               className="hidden sm:flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs font-medium text-slate-300 hover:bg-white/10 transition"
             >
-              <span>Remaining:</span>
-              <strong className="text-blue-400 font-semibold">{freeClonesRemaining}</strong>
+              <span>Free Runs:</span>
+              <strong className="text-blue-400 font-bold">{freeClonesRemaining}</strong>
             </button>
           )}
 
-          {/* Primary Action Button */}
+          {/* Launch Button */}
           <button
             onClick={() => {
-              const el = document.getElementById('cloner-section');
+              const el = document.getElementById('reconstructor-console');
               if (el) el.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="btn-zippix-primary rounded-xl px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-semibold flex items-center gap-2"
+            className="btn-zippix-primary rounded-xl px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-bold flex items-center gap-2"
           >
             <Rocket className="h-4 w-4" />
-            <span>Launch Cloner</span>
+            <span>Start Extraction</span>
           </button>
 
-          {/* Mobile Menu Toggle */}
+          {/* Mobile Menu */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden p-2 rounded-xl border border-white/10 bg-white/5 text-slate-300 hover:text-white"
@@ -133,31 +134,31 @@ export const Header = ({
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-white/10 bg-[#020408]/98 backdrop-blur-2xl px-6 py-6 space-y-4">
           <button
-            onClick={() => scrollToSection('cloner-section')}
+            onClick={() => scrollTo('reconstructor-console')}
             className="block w-full text-left py-2 text-base font-medium text-slate-200 hover:text-blue-400"
           >
-            Engine
+            Console
           </button>
           <button
-            onClick={() => scrollToSection('tools-section')}
+            onClick={() => scrollTo('engine-matrix')}
             className="block w-full text-left py-2 text-base font-medium text-slate-200 hover:text-blue-400"
           >
             Capabilities
           </button>
           <button
-            onClick={() => scrollToSection('dashboard-section')}
+            onClick={() => scrollTo('studio-playground')}
             className="block w-full text-left py-2 text-base font-medium text-slate-200 hover:text-blue-400"
           >
-            Architecture
+            Studio
           </button>
           <button
-            onClick={() => scrollToSection('workflow-section')}
+            onClick={() => scrollTo('workflow-pipelines')}
             className="block w-full text-left py-2 text-base font-medium text-slate-200 hover:text-blue-400"
           >
-            How It Works
+            Pipelines
           </button>
           <button
-            onClick={() => scrollToSection('faq-section')}
+            onClick={() => scrollTo('faq-section')}
             className="block w-full text-left py-2 text-base font-medium text-slate-200 hover:text-blue-400"
           >
             FAQ
