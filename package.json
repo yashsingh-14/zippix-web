@@ -1,0 +1,41 @@
+{
+  "name": "zippix-web",
+  "version": "1.0.0",
+  "description": "Zippix Web - AI-Powered Cloud Webpage Cloner & Token Ripper",
+  "main": "server/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -n \"API,WEB\" -c \"bgBlue.bold,bgMagenta.bold\" \"nodemon server/index.js\" \"vite\"",
+    "dev:server": "nodemon server/index.js",
+    "dev:web": "vite",
+    "server": "node server/index.js",
+    "client": "vite",
+    "build": "vite build",
+    "start": "node server/index.js"
+  },
+  "keywords": ["web-cloner", "tailwind", "design-tokens", "scraper", "zippix"],
+  "author": "Yash Singh",
+  "license": "MIT",
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "jszip": "^3.10.2",
+    "lucide-react": "^1.63.0",
+    "puppeteer-core": "^25.16.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "tailwind-merge": "^3.7.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@vitejs/plugin-react": "^6.1.2",
+    "autoprefixer": "^10.6.2",
+    "concurrently": "^10.0.6",
+    "nodemon": "^3.1.14",
+    "postcss": "^8.5.32",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.5"
+  }
+}

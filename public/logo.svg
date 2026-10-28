@@ -1,0 +1,14 @@
+<svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="zippixWebLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#38bdf8" />
+      <stop offset="50%" stopColor="#818cf8" />
+      <stop offset="100%" stopColor="#c084fc" />
+    </linearGradient>
+  </defs>
+  <rect x="10" y="10" width="108" height="108" rx="28" fill="#171615" stroke="rgba(255,255,255,0.12)" strokeWidth="3" />
+  <polygon points="64,28 94,45 64,62 34,45" fill="url(#zippixWebLogoGrad)" opacity="0.95" />
+  <polygon points="64,49 94,66 64,83 34,66" fill="#38bdf8" opacity="0.8" />
+  <polygon points="64,70 94,87 64,104 34,87" fill="#818cf8" opacity="0.9" />
+  <circle cx="64" cy="45" r="3.5" fill="#ffffff" />
+</svg>
