@@ -187,7 +187,7 @@ export const StudioPlayground = () => {
               <div className="flex items-center justify-between border-b border-white/[0.08] pb-3 mb-4 text-xs font-mono text-slate-400">
                 <span className="text-blue-400 font-semibold flex items-center gap-1">
                   <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                  callofjesus.in (Sandboxed Demo)
+                  stripe.com (Sandboxed Demo)
                 </span>
                 <span>{viewport === 'desktop' ? '1440 × 900' : viewport === 'tablet' ? '768 × 1024' : '375 × 667'}</span>
               </div>

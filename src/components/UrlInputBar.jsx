@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Loader2, ArrowRight, Globe } from 'lucide-react';
 
 const PRESETS = [
-  { name: 'callofjesus.in', url: 'https://callofjesus.in' },
-  { name: 'linear.app', url: 'https://linear.app' },
   { name: 'stripe.com', url: 'https://stripe.com' },
+  { name: 'linear.app', url: 'https://linear.app' },
+  { name: 'vercel.com', url: 'https://vercel.com' },
 ];
 
 export const UrlInputBar = ({ onClone, isLoading }) => {
@@ -38,7 +38,7 @@ export const UrlInputBar = ({ onClone, isLoading }) => {
             type="url"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
-            placeholder="Paste any website URL (e.g. https://callofjesus.in)"
+            placeholder="Paste any website URL (e.g. https://stripe.com)"
             disabled={isLoading}
             className="w-full bg-transparent border-none outline-none text-sm sm:text-base text-white placeholder:text-slate-500 px-3 sm:px-4 py-2.5 sm:py-3 font-normal tracking-wide"
           />
