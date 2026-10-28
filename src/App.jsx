@@ -82,8 +82,13 @@ export default function App() {
     setIsLoading(true);
     setCloneData(null);
 
-    // Smooth scroll up to top when cloner starts
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Automatically smooth scroll directly into the Webpage Cloning section
+    setTimeout(() => {
+      const progressEl = document.getElementById('cloning-progress-section');
+      if (progressEl) {
+        progressEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 120);
 
     try {
       const response = await fetch('/api/clone', {
@@ -99,6 +104,14 @@ export default function App() {
       }
 
       setCloneData(data);
+
+      // Smoothly scroll to the results dashboard when cloning finishes
+      setTimeout(() => {
+        const dashboardEl = document.getElementById('cloned-dashboard-section');
+        if (dashboardEl) {
+          dashboardEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 200);
 
       if (!isPro && !isLocalEnv) {
         const nextUsed = freeClonesUsed + 1;
@@ -138,7 +151,7 @@ export default function App() {
       {/* Main Experience Body */}
       <main className="flex-1 w-full space-y-24 relative z-10">
         {/* Hero Section with Animated Floating 3D Logo Background */}
-        <section id="cloner-section" className="mx-auto max-w-4xl px-4 sm:px-6 text-center pt-16 sm:pt-24 space-y-7 relative">
+        <section id="cloner-section" className="mx-auto max-w-4xl px-4 sm:px-6 text-center pt-24 sm:pt-32 lg:pt-36 space-y-7 relative">
           {/* Animated 3D Floating Isometric Logo Plate System */}
           <AnimatedHeroLogo />
 
@@ -174,14 +187,14 @@ export default function App() {
 
         {/* Live Cloning Progress Tracker */}
         {isLoading && (
-          <div className="mx-auto max-w-4xl px-4">
+          <div id="cloning-progress-section" className="mx-auto max-w-4xl px-4 scroll-mt-28">
             <CloneProgress url={url} />
           </div>
         )}
 
         {/* Cloned Result Dashboard */}
         {cloneData && !isLoading && (
-          <div className="mx-auto max-w-7xl px-4">
+          <div id="cloned-dashboard-section" className="mx-auto max-w-7xl px-4 scroll-mt-24">
             <CloneDashboard cloneData={cloneData} onReset={() => setCloneData(null)} theme="dark" />
           </div>
         )}

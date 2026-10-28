@@ -74,12 +74,13 @@ body::before {
   transform: translateY(-2px);
 }
 
-/* Minimal Clean Apple Navbar */
+/* Minimal Clean Apple Translucent Navbar */
 .apple-glass-nav {
-  background: rgba(2, 5, 12, 0.75);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(2, 5, 12, 0.3);
+  backdrop-filter: blur(20px) saturate(190%);
+  -webkit-backdrop-filter: blur(20px) saturate(190%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
 
 /* Apple Floating Pill */

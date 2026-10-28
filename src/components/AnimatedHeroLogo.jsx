@@ -2,12 +2,12 @@ import React from 'react';
 
 export const AnimatedHeroLogo = () => {
   return (
-    <div className="absolute top-[42%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] sm:w-[500px] md:w-[620px] h-[320px] sm:h-[500px] md:h-[620px] pointer-events-none select-none -z-10 opacity-22 sm:opacity-28 transition-all duration-700">
+    <div className="absolute top-[48%] sm:top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] sm:w-[520px] md:w-[640px] h-[340px] sm:h-[520px] md:h-[640px] pointer-events-none select-none -z-10 opacity-25 sm:opacity-30 transition-all duration-700">
       <svg
-        viewBox="0 0 128 128"
+        viewBox="-16 -24 160 168"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-full filter drop-shadow-[0_0_80px_rgba(56,189,248,0.3)]"
+        className="w-full h-full overflow-visible filter drop-shadow-[0_0_80px_rgba(56,189,248,0.28)]"
       >
         <defs>
           {/* Top Layer Gradient (Vibrant Sky to Purple) */}
@@ -42,8 +42,8 @@ export const AnimatedHeroLogo = () => {
         </defs>
 
         {/* Ambient Radial Energy Ring behind Logo */}
-        <circle cx="64" cy="64" r="56" stroke="rgba(56, 189, 248, 0.12)" strokeWidth="1" strokeDasharray="4 6" />
-        <circle cx="64" cy="64" r="44" stroke="rgba(129, 140, 248, 0.12)" strokeWidth="0.8" />
+        <circle cx="64" cy="64" r="58" stroke="rgba(56, 189, 248, 0.12)" strokeWidth="1" strokeDasharray="4 6" />
+        <circle cx="64" cy="64" r="46" stroke="rgba(129, 140, 248, 0.12)" strokeWidth="0.8" />
 
         {/* BOTTOM LAYER (Layer 3 - Floating with offset cadence) */}
         <g className="animate-plate-bot" filter="url(#heroLayerShadow)">
