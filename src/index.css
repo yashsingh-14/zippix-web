@@ -2,71 +2,123 @@
 
 @layer base {
   body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #020408;
+    color: #f1f5f9;
   }
 }
 
-/* WebCloner Light Grid Background */
-.webcloner-grid-light {
-  background-color: #f8fafc;
-  background-image: 
-    linear-gradient(to right, rgba(99, 102, 241, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(99, 102, 241, 0.08) 1px, transparent 1px);
-  background-size: 60px 60px;
+/* Ankit Sajwan Inspired Typography */
+.font-serif-italic {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  letter-spacing: 0.01em;
 }
 
-/* WebCloner Dark Cyber Grid Background */
-.webcloner-grid-dark {
-  background-color: #07070a;
-  background-image: 
-    radial-gradient(at 50% 0%, rgba(37, 99, 235, 0.15) 0px, transparent 65%),
-    radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.12) 0px, transparent 50%),
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 60px 60px, 60px 60px;
+/* Ankit Sajwan Signature Celestial Gradient */
+.text-ankit-gradient {
+  background: linear-gradient(135deg, #60a5fa 0%, #93c5fd 45%, #ffffff 90%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* Custom Scrollbar */
+/* Atmospheric Cosmic Blue Light Gradient */
+.text-cyan-glow-gradient {
+  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Velvet Obsidian Canvas with Celestial Side Glow (Directly matching Ankit Sajwan screenshot) */
+.ankit-canvas {
+  background-color: #020408;
+  background-image: 
+    radial-gradient(ellipse 65% 55% at 0% 25%, rgba(30, 64, 175, 0.32) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 55% at 100% 45%, rgba(29, 78, 216, 0.25) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 40% at 50% -10%, rgba(37, 99, 235, 0.28) 0%, transparent 70%);
+  background-attachment: fixed;
+}
+
+/* Premium Dark Glass Card */
+.glass-card {
+  background: rgba(7, 12, 26, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
+    0 20px 40px -15px rgba(0, 0, 0, 0.8);
+}
+
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card-hover:hover {
+  border-color: rgba(96, 165, 250, 0.35);
+  box-shadow: 
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.15),
+    0 0 30px -5px rgba(37, 99, 235, 0.25),
+    0 25px 50px -12px rgba(0, 0, 0, 0.9);
+  transform: translateY(-2px);
+}
+
+/* Celestial Royal Button */
+.btn-zippix-primary {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  font-weight: 600;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 
+    0 0 25px rgba(37, 99, 235, 0.45),
+    0 4px 12px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.btn-zippix-primary:hover {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  box-shadow: 
+    0 0 35px rgba(59, 130, 246, 0.65),
+    0 6px 20px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-zippix-primary:active {
+  transform: translateY(0px) scale(0.98);
+}
+
+/* Glass Outline Secondary Button */
+.btn-zippix-secondary {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f1f5f9;
+  backdrop-filter: blur(12px);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-zippix-secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(96, 165, 250, 0.4);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* Custom Sleek Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #020408;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.4);
+  background: rgba(96, 165, 250, 0.25);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(37, 99, 235, 0.7);
-}
-
-/* WebCloner Royal Blue Primary Button */
-.btn-webcloner {
-  background-color: #2563eb;
-  color: #ffffff;
-  font-weight: 700;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.3);
-}
-
-.btn-webcloner:hover {
-  background-color: #1d4ed8;
-  box-shadow: 0 6px 20px 0 rgba(37, 99, 235, 0.45);
-  transform: translateY(-1px);
-}
-
-.btn-webcloner:active {
-  transform: translateY(0px) scale(0.98);
-}
-
-/* WebCloner Gradient Headline */
-.text-webcloner-gradient {
-  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 50%, #7c3aed 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  background: rgba(96, 165, 250, 0.5);
 }
 
 /* Infinite Marquee Track */
@@ -78,7 +130,7 @@
 .animate-marquee {
   display: flex;
   width: max-content;
-  animation: marquee 28s linear infinite;
+  animation: marquee 32s linear infinite;
 }
 
 .animate-marquee:hover {
@@ -88,7 +140,7 @@
 /* Floating Badges Animation */
 @keyframes floatBadge {
   0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
+  50% { transform: translateY(-6px); }
 }
 
 .float-badge {

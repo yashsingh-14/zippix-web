@@ -117,7 +117,7 @@ export const CloneDashboard = ({ cloneData, onReset, theme = 'light' }) => {
             <a
               href={downloadUrl}
               download={filename}
-              className="btn-webcloner flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-bold shadow-md"
+              className="btn-zippix-primary flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-bold shadow-md"
             >
               <Archive className="h-4 w-4 fill-white" />
               <span>Download Full ZIP</span>

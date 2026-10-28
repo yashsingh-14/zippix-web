@@ -14,33 +14,13 @@ import { AboutModal } from './components/AboutModal.jsx';
 import { PrivacyModal } from './components/PrivacyModal.jsx';
 import { TermsModal } from './components/TermsModal.jsx';
 import { ContactModal } from './components/ContactModal.jsx';
-import { Zap, Rocket, Globe, Shield, CheckCircle2 } from 'lucide-react';
+import { Sparkles, Rocket, Globe, Shield, CheckCircle2, ArrowRight } from 'lucide-react';
 
 export default function App() {
   const [url, setUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [cloneData, setCloneData] = useState(null);
   const [error, setError] = useState(null);
-
-  // Theme state: defaults to 'light' to match webcloner.tech clean look
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('webcloner_theme') || 'light';
-  });
-
-  useEffect(() => {
-    localStorage.setItem('webcloner_theme', theme);
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
-  };
-
-  const isDark = theme === 'dark';
 
   // Modals state
   const [isProModalOpen, setIsProModalOpen] = useState(false);
@@ -98,7 +78,7 @@ export default function App() {
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Failed to clone website. Please try another URL.');
+        throw new Error(data.error || 'Failed to reconstruct website. Please verify the URL and try again.');
       }
 
       setCloneData(data);
@@ -109,26 +89,21 @@ export default function App() {
         localStorage.setItem('zippix_web_clones_used', nextUsed.toString());
       }
     } catch (err) {
-      setError(err.message || 'Error occurred while cloning website.');
+      setError(err.message || 'Error occurred while reconstructing website.');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div
-      className={`relative min-h-screen flex flex-col transition-colors duration-200 overflow-x-hidden ${
-        isDark ? 'bg-[#07070a] text-slate-100 webcloner-grid-dark' : 'bg-white text-slate-900 webcloner-grid-light'
-      }`}
-    >
-      {/* Soft Ambient Radial Blur Orbs */}
-      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-blue-500/10 blur-[120px] -z-10" />
-      <div className="pointer-events-none absolute top-[25%] right-0 w-[450px] h-[450px] bg-purple-500/10 blur-[140px] -z-10" />
+    <div className="relative min-h-screen flex flex-col ankit-canvas text-slate-100 overflow-x-hidden selection:bg-blue-500/30 selection:text-blue-200">
+      {/* Signature Atmospheric Side Glow Auras (Faithfully matching Ankit Sajwan reference) */}
+      <div className="fixed top-24 -left-48 w-[650px] h-[650px] rounded-full bg-blue-600/25 blur-[160px] pointer-events-none -z-10" />
+      <div className="fixed top-[45%] -right-48 w-[550px] h-[550px] rounded-full bg-indigo-600/20 blur-[170px] pointer-events-none -z-10" />
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[900px] h-[350px] rounded-full bg-blue-500/15 blur-[140px] pointer-events-none -z-10" />
 
       {/* Header */}
       <Header
-        theme={theme}
-        onToggleTheme={toggleTheme}
         isPro={isPro}
         freeClonesRemaining={freeClonesRemaining}
         onOpenProModal={() => setIsProModalOpen(true)}
@@ -138,36 +113,39 @@ export default function App() {
       />
 
       {/* Main Body */}
-      <main className="flex-1 w-full space-y-16">
+      <main className="flex-1 w-full space-y-20">
         {/* Hero Section */}
-        <section id="cloner-section" className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center pt-10 sm:pt-16 space-y-6">
-          {/* Bolt Pill Announcement Badge */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-1.5 text-xs font-bold text-blue-600 dark:text-blue-400">
-            <Zap className="h-3.5 w-3.5 fill-blue-500 text-blue-500" />
-            <span>Website Migration, Backup & Development Tool</span>
+        <section id="cloner-section" className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center pt-12 sm:pt-20 space-y-7">
+          {/* Announcement Badge */}
+          <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-1.5 text-xs font-semibold text-blue-300 backdrop-blur-md shadow-sm">
+            <Sparkles className="h-3.5 w-3.5 text-blue-400" />
+            <span>Next-Generation AI Web Reconstruction Engine</span>
           </div>
 
-          {/* Headline matching webcloner.tech */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.1]">
-            Clone <span className="text-webcloner-gradient">Websites You Own</span>
-            <br className="hidden sm:inline" /> and Download It as ZIP
+          {/* Master Headline with Ankit Sajwan Typographic Pairing */}
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] text-white">
+            Reconstruct Any Website into{' '}
+            <br className="hidden sm:inline" />
+            <span className="font-serif-italic text-ankit-gradient text-5xl sm:text-7xl lg:text-8xl">
+              Pure Source Code
+            </span>{' '}
+            & Instant ZIP
           </h1>
 
           {/* Subtitle */}
-          <p className="mx-auto max-w-3xl text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
-            Capture and export the HTML, CSS, JavaScript, images, and other publicly accessible assets of websites you
-            own or are authorized to reproduce. Use WebCloner for migration, backup, archival, development, testing, and
-            other lawful workflows.
+          <p className="mx-auto max-w-3xl text-sm sm:text-base text-slate-400 leading-relaxed font-normal">
+            Single-click headless Chromium execution to capture full DOM architectures, 60 FPS motion layers, and
+            Tailwind design tokens without breaking a single asset.
           </p>
 
-          {/* Big Input Card */}
+          {/* Big Input Capsule Card */}
           <div className="pt-2">
-            <UrlInputBar onClone={handleClone} isLoading={isLoading} theme={theme} />
+            <UrlInputBar onClone={handleClone} isLoading={isLoading} />
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="mx-auto max-w-xl rounded-xl border border-red-500/30 bg-red-50 dark:bg-red-950/40 p-3.5 text-xs text-red-600 dark:text-red-300 text-center">
+            <div className="mx-auto max-w-xl rounded-xl border border-red-500/40 bg-red-950/40 p-4 text-xs text-red-200 text-center backdrop-blur-md">
               {error}
             </div>
           )}
@@ -183,73 +161,92 @@ export default function App() {
         {/* Cloned Result Dashboard */}
         {cloneData && !isLoading && (
           <div className="mx-auto max-w-7xl px-4">
-            <CloneDashboard cloneData={cloneData} onReset={() => setCloneData(null)} theme={theme} />
+            <CloneDashboard cloneData={cloneData} onReset={() => setCloneData(null)} theme="dark" />
           </div>
         )}
 
+        {/* Ankit Sajwan Inspired Vision & Philosophy Section */}
+        <section id="vision-section" className="py-24 relative overflow-hidden border-y border-white/[0.06] bg-[#020408]/60 backdrop-blur-sm">
+          <div className="mx-auto max-w-4xl px-4 sm:px-6 text-center space-y-8">
+            <div className="space-y-3">
+              <p className="text-xs font-mono uppercase tracking-widest text-blue-400">Our Core Philosophy</p>
+              <h2 className="text-4xl sm:text-6xl font-light tracking-tight text-white">
+                Our <span className="font-serif-italic text-ankit-gradient text-5xl sm:text-7xl">Vision</span>
+              </h2>
+            </div>
+
+            <p className="text-xl sm:text-2xl lg:text-3xl font-light text-slate-200 leading-relaxed max-w-3xl mx-auto">
+              To <span className="font-serif-italic text-ankit-gradient">Democratize the Web</span> — To unveil the{' '}
+              <span className="font-serif-italic text-ankit-gradient">True Architecture of Code</span> as clean, production-ready source — To{' '}
+              <span className="font-serif-italic text-ankit-gradient">Empower and Equip</span> creators to recreate and build without boundaries
+            </p>
+
+            <div className="flex items-center justify-center gap-4 pt-4">
+              <div className="h-px w-20 bg-gradient-to-r from-transparent via-blue-500/40 to-blue-500/80" />
+              <span className="h-2 w-2 rounded-full bg-blue-400 shadow-[0_0_10px_#60a5fa] animate-pulse" />
+              <div className="h-px w-20 bg-gradient-to-l from-transparent via-blue-500/40 to-blue-500/80" />
+            </div>
+          </div>
+        </section>
+
         {/* Moving Marquee Banner */}
-        <MarqueeBanner theme={theme} />
+        <MarqueeBanner />
 
         {/* Bento Tools Grid */}
-        <ToolsBento theme={theme} />
+        <ToolsBento />
 
         {/* Dashboard Showcase Section with Floating Badges */}
-        <DashboardShowcase theme={theme} />
+        <DashboardShowcase />
 
         {/* Personas / Solutions Section */}
-        <PersonasSection theme={theme} />
+        <PersonasSection />
 
         {/* 3 Simple Steps */}
-        <section className={`py-20 border-y ${isDark ? 'bg-[#0a0a14] border-white/10' : 'bg-slate-50 border-slate-200'}`}>
+        <section className="py-20 border-y border-white/[0.06] bg-[#030612]/60">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 space-y-12">
             <div className="text-center space-y-3">
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">Get Started in 3 Simple Steps</h2>
-              <p className="text-sm text-slate-500 dark:text-slate-400 max-w-xl mx-auto">
+              <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-1 text-xs font-semibold text-blue-300 backdrop-blur-md">
+                <span>Fast & Frictionless</span>
+              </div>
+              <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
+                Reconstruct in <span className="font-serif-italic text-ankit-gradient">3 Seamless Steps</span>
+              </h2>
+              <p className="text-sm text-slate-400 max-w-xl mx-auto font-normal">
                 No complex browser plugins or scrapers needed. Instant full-page reproduction in seconds.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div
-                className={`p-8 rounded-2xl border text-center space-y-4 ${
-                  isDark ? 'bg-[#0e0e18] border-white/10' : 'bg-white border-slate-200 shadow-sm'
-                }`}
-              >
-                <div className="h-12 w-12 rounded-xl bg-blue-600 text-white font-bold text-lg flex items-center justify-center mx-auto shadow-md shadow-blue-500/20">
+              <div className="glass-card glass-card-hover p-8 rounded-2xl text-center space-y-4">
+                <div className="h-12 w-12 rounded-xl btn-zippix-primary text-white font-bold text-lg flex items-center justify-center mx-auto">
                   1
                 </div>
-                <h3 className="text-lg font-bold">Enter an Authorized URL</h3>
-                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
-                  Enter the URL of any website you own or are authorized to reproduce, and choose your recreation depth.
+                <h3 className="text-lg font-bold text-white">Enter Target URL</h3>
+                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                  Provide the URL of any authorized webpage you wish to reconstruct, and choose your preferred
+                  extraction depth.
                 </p>
               </div>
 
-              <div
-                className={`p-8 rounded-2xl border text-center space-y-4 ${
-                  isDark ? 'bg-[#0e0e18] border-white/10' : 'bg-white border-slate-200 shadow-sm'
-                }`}
-              >
-                <div className="h-12 w-12 rounded-xl bg-blue-600 text-white font-bold text-lg flex items-center justify-center mx-auto shadow-md shadow-blue-500/20">
+              <div className="glass-card glass-card-hover p-8 rounded-2xl text-center space-y-4">
+                <div className="h-12 w-12 rounded-xl btn-zippix-primary text-white font-bold text-lg flex items-center justify-center mx-auto">
                   2
                 </div>
-                <h3 className="text-lg font-bold">Captures Accessible Resources</h3>
-                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
-                  Our cloud Chromium engine executes all JavaScript, mounts React/Next.js hydrations, and extracts
-                  assets.
+                <h3 className="text-lg font-bold text-white">Headless Virtualization</h3>
+                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                  Our cloud Chromium engine executes JavaScript, resolves React hydrations, and preserves interactive
+                  motion layers.
                 </p>
               </div>
 
-              <div
-                className={`p-8 rounded-2xl border text-center space-y-4 ${
-                  isDark ? 'bg-[#0e0e18] border-white/10' : 'bg-white border-slate-200 shadow-sm'
-                }`}
-              >
-                <div className="h-12 w-12 rounded-xl bg-blue-600 text-white font-bold text-lg flex items-center justify-center mx-auto shadow-md shadow-blue-500/20">
+              <div className="glass-card glass-card-hover p-8 rounded-2xl text-center space-y-4">
+                <div className="h-12 w-12 rounded-xl btn-zippix-primary text-white font-bold text-lg flex items-center justify-center mx-auto">
                   3
                 </div>
-                <h3 className="text-lg font-bold">Export Your Website</h3>
-                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
-                  Download the resulting standalone ZIP package containing index.html, Tailwind v4 theme, and all media.
+                <h3 className="text-lg font-bold text-white">Export Code & ZIP</h3>
+                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                  Instantly download your standalone ZIP bundle containing index.html, Tailwind v4 theme, and all media
+                  assets.
                 </p>
               </div>
             </div>
@@ -257,34 +254,29 @@ export default function App() {
         </section>
 
         {/* Testimonials */}
-        <TestimonialsSection theme={theme} />
+        <TestimonialsSection />
 
         {/* FAQs */}
-        <FaqSection theme={theme} />
+        <FaqSection />
 
         {/* Bottom Call to Action */}
-        <section className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-16 text-center">
-          <div
-            className={`rounded-3xl border p-8 sm:p-14 space-y-6 text-center ${
-              isDark
-                ? 'bg-gradient-to-b from-[#121222] to-[#0a0a14] border-white/10 shadow-2xl'
-                : 'bg-gradient-to-b from-blue-50 to-white border-blue-200/80 shadow-xl'
-            }`}
-          >
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-              Ready to Capture Your First Website?
+        <section className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-20 text-center">
+          <div className="glass-card rounded-3xl p-8 sm:p-14 space-y-6 text-center relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-b from-blue-600/10 via-transparent to-transparent pointer-events-none" />
+            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
+              Ready to Reconstruct Your <span className="font-serif-italic text-ankit-gradient">First Website</span>?
             </h2>
-            <p className="text-sm text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
-              Join thousands of developers, agencies, and web professionals archiving and migrating websites with
-              WebCloner.
+            <p className="text-sm text-slate-400 max-w-xl mx-auto leading-relaxed">
+              Join thousands of developers, agencies, and web creators deconstructing and migrating websites with
+              Zippix.
             </p>
-            <div>
+            <div className="pt-2">
               <button
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                className="btn-webcloner rounded-xl px-8 py-3.5 text-sm font-bold inline-flex items-center gap-2"
+                className="btn-zippix-primary rounded-xl px-8 py-4 text-sm font-semibold inline-flex items-center gap-2.5 shadow-xl"
               >
                 <Rocket className="h-4 w-4" />
-                <span>Start Free Now</span>
+                <span>Launch Cloner Free</span>
               </button>
             </div>
           </div>
@@ -292,30 +284,28 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer
-        className={`border-t py-8 transition-colors ${
-          isDark ? 'bg-[#07070a] border-white/10 text-slate-400' : 'bg-white border-slate-200 text-slate-600'
-        }`}
-      >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-          <div className="flex items-center gap-2">
-            <img src="/logo.svg" alt="Logo" className="h-6 w-6 object-contain" />
-            <span className="font-bold text-slate-800 dark:text-white">WebCloner</span>
-            <span>© {new Date().getFullYear()} WebCloner by Zippix. All rights reserved.</span>
+      <footer className="border-t border-white/[0.08] py-10 bg-[#020408]/90 text-slate-400">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-xs">
+          <div className="flex items-center gap-3">
+            <img src="/logo.svg" alt="Zippix Logo" className="h-7 w-7 object-contain" />
+            <span className="font-bold text-white text-sm">Zippix</span>
+            <span className="text-slate-500">
+              © {new Date().getFullYear()} Zippix Cloud Technologies. All rights reserved.
+            </span>
           </div>
 
           <div className="flex items-center gap-6">
-            <button onClick={() => setIsPrivacyOpen(true)} className="hover:text-blue-600 transition">
+            <button onClick={() => setIsPrivacyOpen(true)} className="hover:text-blue-400 transition">
               Privacy Policy
             </button>
-            <button onClick={() => setIsTermsOpen(true)} className="hover:text-blue-600 transition">
+            <button onClick={() => setIsTermsOpen(true)} className="hover:text-blue-400 transition">
               Terms of Use
             </button>
-            <button onClick={() => setIsContactOpen(true)} className="hover:text-blue-600 transition">
-              Contact Us
+            <button onClick={() => setIsContactOpen(true)} className="hover:text-blue-400 transition">
+              Contact Support
             </button>
-            <button onClick={() => setIsAboutOpen(true)} className="hover:text-blue-600 transition">
-              About Us
+            <button onClick={() => setIsAboutOpen(true)} className="hover:text-blue-400 transition">
+              About Zippix
             </button>
           </div>
         </div>

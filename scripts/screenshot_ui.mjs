@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer-core';
 import { getAvailableBrowserPath } from '../server/cloner/browser.js';
 
-async function screenshotLocalhost() {
+async function screenshotSections() {
   const executablePath = getAvailableBrowserPath();
   const browser = await puppeteer.launch({
     executablePath,
@@ -12,11 +12,21 @@ async function screenshotLocalhost() {
   const page = await browser.newPage();
   await page.setViewport({ width: 1440, height: 900 });
   await page.goto('http://localhost:3000', { waitUntil: 'networkidle2' });
-  await new Promise(r => setTimeout(r, 1500));
+  await new Promise(r => setTimeout(r, 1000));
 
-  await page.screenshot({ path: 'scripts/debug_output/our_new_webcloner_ui.png', fullPage: false });
+  // Scroll to vision section
+  await page.evaluate(() => {
+    const el = document.getElementById('vision-section');
+    if (el) el.scrollIntoView({ behavior: 'instant' });
+  });
+  await new Promise(r => setTimeout(r, 800));
+  await page.screenshot({ path: 'scripts/debug_output/our_vision_section.png', fullPage: false });
+
+  // Full page screenshot
+  await page.screenshot({ path: 'scripts/debug_output/full_landing_page.png', fullPage: true });
+
   await browser.close();
-  console.log('Saved screenshot to scripts/debug_output/our_new_webcloner_ui.png');
+  console.log('Screenshots saved successfully');
 }
 
-screenshotLocalhost();
+screenshotSections();
