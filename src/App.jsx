@@ -151,29 +151,29 @@ export default function App() {
       {/* Main Experience Body */}
       <main className="flex-1 w-full space-y-24 relative z-10">
         {/* Hero Section with Animated Floating 3D Logo Background */}
-        <section id="cloner-section" className="mx-auto max-w-4xl px-4 sm:px-6 text-center pt-8 sm:pt-12 lg:pt-14 space-y-4 sm:space-y-5 relative">
+        <section id="cloner-section" className="mx-auto max-w-4xl px-4 sm:px-6 text-center pt-14 sm:pt-18 lg:pt-22 space-y-5 sm:space-y-6 relative">
           {/* Animated 3D Floating Isometric Logo Plate System */}
           <AnimatedHeroLogo />
 
           {/* Subtle Indicator Pill */}
-          <div className="inline-flex items-center gap-2 rounded-full apple-glass-pill px-3.5 py-1 text-xs font-medium text-slate-300">
+          <div className="inline-flex items-center gap-2 rounded-full apple-glass-pill px-4 py-1.5 text-xs font-medium text-slate-300">
             <span className="h-1.5 w-1.5 rounded-full bg-sky-400 animate-pulse" />
             <span>Instant Website Cloner</span>
           </div>
 
           {/* Master Headline */}
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-[1.08] text-white">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-[1.08] text-white">
             Clone Any Website into <br />
             <span className="text-gradient-logo">Clean Code & ZIP</span>
           </h1>
 
           {/* Minimal 1-Sentence Subtitle */}
-          <p className="mx-auto max-w-lg text-xs sm:text-sm text-slate-400 leading-relaxed font-normal">
+          <p className="mx-auto max-w-xl text-sm sm:text-base text-slate-400 leading-relaxed font-normal">
             Enter any URL to extract clean HTML, modern CSS styling, and offline assets in seconds.
           </p>
 
           {/* Minimal Command Console */}
-          <div className="pt-1">
+          <div className="pt-2">
             <UrlInputBar onClone={handleClone} isLoading={isLoading} />
           </div>
 

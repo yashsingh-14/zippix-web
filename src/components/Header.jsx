@@ -21,33 +21,33 @@ export const Header = ({
 
   return (
     <header className="sticky top-0 z-50 w-full apple-glass-nav transition-all">
-      <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4 sm:px-6">
-        {/* Brand: Logo + Clean Wordmark */}
+      <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-6 sm:px-10 lg:px-12">
+        {/* Brand: Logo + Clean Wordmark (Expanded to Left) */}
         <div
-          className="flex items-center gap-2.5 cursor-pointer group select-none shrink-0"
+          className="flex items-center gap-3 cursor-pointer group select-none shrink-0"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
           <img
             src="/logo.svg"
             alt="Zippix"
-            className="h-7 w-7 object-contain transition duration-300 group-hover:scale-105 filter drop-shadow-[0_2px_8px_rgba(56,189,248,0.35)]"
+            className="h-8 w-8 object-contain transition duration-300 group-hover:scale-105 filter drop-shadow-[0_2px_10px_rgba(56,189,248,0.4)]"
           />
-          <span className="text-base font-bold tracking-tight text-white group-hover:text-sky-300 transition">
+          <span className="text-xl font-bold tracking-tight text-white group-hover:text-sky-300 transition">
             Zippix
           </span>
         </div>
 
-        {/* Desktop Nav Items: Slim Sundown Studio Inspired Pills */}
-        <div className="hidden md:flex items-center gap-2">
+        {/* Desktop Nav Items: Expanded Sundown Studio Inspired Pills (Spread to Right) */}
+        <div className="hidden md:flex items-center gap-3.5">
           <button
             onClick={() => scrollTo('studio-playground')}
-            className="sundown-nav-pill py-1.5 px-3.5 text-xs"
+            className="sundown-nav-pill px-5 py-2 text-sm"
           >
             <span>Studio</span>
           </button>
           <button
             onClick={() => scrollTo('faq-section')}
-            className="sundown-nav-pill py-1.5 px-3.5 text-xs"
+            className="sundown-nav-pill px-5 py-2 text-sm"
           >
             <span>FAQ</span>
           </button>
@@ -56,31 +56,31 @@ export const Header = ({
             <div className="relative">
               <button
                 onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                className="flex items-center gap-2 rounded-full py-1 px-3 apple-glass-pill hover:border-white/30 transition text-xs"
+                className="flex items-center gap-2 rounded-full py-2 px-4 apple-glass-pill hover:border-white/30 transition text-sm"
               >
                 <img
                   src={user.avatar || '/logo.svg'}
                   alt={user.name}
-                  className="h-5 w-5 rounded-full border border-white/20 bg-blue-950 object-cover"
+                  className="h-6 w-6 rounded-full border border-white/20 bg-blue-950 object-cover"
                 />
                 <span className="font-semibold text-white">{user.name}</span>
-                <ChevronDown className="h-3 w-3 text-slate-400" />
+                <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
               </button>
 
               {userDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 apple-glass-modal rounded-2xl p-1.5 shadow-2xl border border-white/10 z-50 text-xs">
-                  <div className="px-3 py-2 border-b border-white/[0.06] mb-1">
-                    <p className="font-bold text-white truncate">{user.name}</p>
-                    <p className="text-[10px] text-slate-400 truncate">{user.email}</p>
+                <div className="absolute right-0 mt-2 w-52 apple-glass-modal rounded-2xl p-2 shadow-2xl border border-white/10 z-50 text-xs">
+                  <div className="px-3.5 py-2.5 border-b border-white/[0.06] mb-1">
+                    <p className="font-bold text-white truncate text-sm">{user.name}</p>
+                    <p className="text-xs text-slate-400 truncate">{user.email}</p>
                   </div>
                   <button
                     onClick={() => {
                       setUserDropdownOpen(false);
                       onOpenProModal();
                     }}
-                    className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 text-left transition"
+                    className="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 text-left transition"
                   >
-                    <Zap className="h-3.5 w-3.5 text-sky-400" />
+                    <Zap className="h-4 w-4 text-sky-400" />
                     <span>Pro Account</span>
                   </button>
                   <button
@@ -88,9 +88,9 @@ export const Header = ({
                       setUserDropdownOpen(false);
                       onLogout();
                     }}
-                    className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-red-400 hover:bg-red-500/10 text-left transition"
+                    className="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-red-400 hover:bg-red-500/10 text-left transition"
                   >
-                    <LogOut className="h-3.5 w-3.5" />
+                    <LogOut className="h-4 w-4" />
                     <span>Sign Out</span>
                   </button>
                 </div>
@@ -99,42 +99,42 @@ export const Header = ({
           ) : (
             <button
               onClick={onOpenAuth}
-              className="sundown-nav-pill py-1.5 px-3.5 text-xs"
+              className="sundown-nav-pill px-5 py-2 text-sm"
             >
               <span>Sign In</span>
             </button>
           )}
 
-          {/* Primary CTA Pill with Sundown White Bubble Roll */}
+          {/* Primary Expanded CTA Pill */}
           <button
             onClick={() => {
               const el = document.getElementById('cloner-section');
               if (el) el.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="sundown-nav-pill-primary py-1.5 px-4 text-xs ml-1"
+            className="sundown-nav-pill-primary px-6 py-2.5 text-sm ml-1"
           >
             <span>Start Free</span>
-            <ArrowRight className="h-3 w-3" />
+            <ArrowRight className="h-4 w-4" />
           </button>
         </div>
 
         {/* Mobile Nav Right: Start Free + Menu Pill */}
-        <div className="flex md:hidden items-center gap-2">
+        <div className="flex md:hidden items-center gap-2.5">
           <button
             onClick={() => {
               const el = document.getElementById('cloner-section');
               if (el) el.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="sundown-nav-pill-primary px-3 py-1 text-xs"
+            className="sundown-nav-pill-primary px-4 py-1.5 text-xs"
           >
             <span>Start Free</span>
           </button>
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="sundown-nav-pill px-3 py-1 text-xs flex items-center gap-1.5"
+            className="sundown-nav-pill px-3.5 py-1.5 text-xs flex items-center gap-1.5"
           >
-            {mobileMenuOpen ? <X className="h-3.5 w-3.5" /> : <Menu className="h-3.5 w-3.5" />}
+            {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             <span>Menu</span>
           </button>
         </div>
@@ -142,7 +142,7 @@ export const Header = ({
 
       {/* Clean Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-white/[0.06] bg-[#020408]/98 backdrop-blur-2xl px-6 py-4 space-y-3 text-sm">
+        <div className="md:hidden border-t border-white/[0.08] bg-[#020408]/98 backdrop-blur-3xl px-6 py-5 space-y-3.5 text-base shadow-2xl">
           <button
             onClick={() => scrollTo('studio-playground')}
             className="block w-full text-left py-2 text-slate-300 hover:text-white"
@@ -155,14 +155,14 @@ export const Header = ({
           >
             Frequently Asked Questions
           </button>
-          <div className="pt-3 border-t border-white/[0.06] flex items-center justify-between">
+          <div className="pt-3.5 border-t border-white/[0.08] flex items-center justify-between">
             {!user ? (
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
                   onOpenAuth();
                 }}
-                className="text-xs font-semibold text-sky-400"
+                className="text-sm font-semibold text-sky-400"
               >
                 Sign In / Register
               </button>
@@ -172,7 +172,7 @@ export const Header = ({
                   setMobileMenuOpen(false);
                   onLogout();
                 }}
-                className="text-xs text-red-400"
+                className="text-sm text-red-400"
               >
                 Sign Out
               </button>
@@ -182,7 +182,7 @@ export const Header = ({
                 setMobileMenuOpen(false);
                 onOpenAbout();
               }}
-              className="text-xs text-slate-400"
+              className="text-sm text-slate-400"
             >
               About
             </button>
