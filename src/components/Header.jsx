@@ -21,33 +21,33 @@ export const Header = ({
 
   return (
     <header className="sticky top-0 z-50 w-full apple-glass-nav transition-all">
-      <div className="mx-auto flex h-18 max-w-6xl items-center justify-between px-4 sm:px-6">
+      <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4 sm:px-6">
         {/* Brand: Logo + Clean Wordmark */}
         <div
-          className="flex items-center gap-3 cursor-pointer group select-none shrink-0"
+          className="flex items-center gap-2.5 cursor-pointer group select-none shrink-0"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
           <img
             src="/logo.svg"
             alt="Zippix"
-            className="h-8 w-8 object-contain transition duration-300 group-hover:scale-105 filter drop-shadow-[0_2px_10px_rgba(56,189,248,0.3)]"
+            className="h-7 w-7 object-contain transition duration-300 group-hover:scale-105 filter drop-shadow-[0_2px_8px_rgba(56,189,248,0.35)]"
           />
-          <span className="text-lg font-bold tracking-tight text-white group-hover:text-sky-300 transition">
+          <span className="text-base font-bold tracking-tight text-white group-hover:text-sky-300 transition">
             Zippix
           </span>
         </div>
 
-        {/* Desktop Nav Items: Sundown Studio Inspired Pills */}
-        <div className="hidden md:flex items-center gap-2.5">
+        {/* Desktop Nav Items: Slim Sundown Studio Inspired Pills */}
+        <div className="hidden md:flex items-center gap-2">
           <button
             onClick={() => scrollTo('studio-playground')}
-            className="sundown-nav-pill"
+            className="sundown-nav-pill py-1.5 px-3.5 text-xs"
           >
             <span>Studio</span>
           </button>
           <button
             onClick={() => scrollTo('faq-section')}
-            className="sundown-nav-pill"
+            className="sundown-nav-pill py-1.5 px-3.5 text-xs"
           >
             <span>FAQ</span>
           </button>
@@ -56,7 +56,7 @@ export const Header = ({
             <div className="relative">
               <button
                 onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                className="flex items-center gap-2 rounded-full py-1.5 px-3 apple-glass-pill hover:border-white/30 transition text-xs"
+                className="flex items-center gap-2 rounded-full py-1 px-3 apple-glass-pill hover:border-white/30 transition text-xs"
               >
                 <img
                   src={user.avatar || '/logo.svg'}
@@ -99,7 +99,7 @@ export const Header = ({
           ) : (
             <button
               onClick={onOpenAuth}
-              className="sundown-nav-pill"
+              className="sundown-nav-pill py-1.5 px-3.5 text-xs"
             >
               <span>Sign In</span>
             </button>
@@ -111,10 +111,10 @@ export const Header = ({
               const el = document.getElementById('cloner-section');
               if (el) el.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="sundown-nav-pill-primary ml-1"
+            className="sundown-nav-pill-primary py-1.5 px-4 text-xs ml-1"
           >
             <span>Start Free</span>
-            <ArrowRight className="h-3.5 w-3.5" />
+            <ArrowRight className="h-3 w-3" />
           </button>
         </div>
 
@@ -125,14 +125,14 @@ export const Header = ({
               const el = document.getElementById('cloner-section');
               if (el) el.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="sundown-nav-pill-primary px-3 py-1.5 text-xs"
+            className="sundown-nav-pill-primary px-3 py-1 text-xs"
           >
             <span>Start Free</span>
           </button>
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="sundown-nav-pill px-3 py-1.5 text-xs flex items-center gap-1.5"
+            className="sundown-nav-pill px-3 py-1 text-xs flex items-center gap-1.5"
           >
             {mobileMenuOpen ? <X className="h-3.5 w-3.5" /> : <Menu className="h-3.5 w-3.5" />}
             <span>Menu</span>
