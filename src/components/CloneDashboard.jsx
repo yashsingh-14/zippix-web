@@ -17,11 +17,13 @@ import {
   Sparkles,
 } from 'lucide-react';
 
-export const CloneDashboard = ({ cloneData, onReset }) => {
+export const CloneDashboard = ({ cloneData, onReset, theme = 'light' }) => {
   const [activeTab, setActiveTab] = useState('preview');
   const [viewport, setViewport] = useState('desktop');
   const [copiedKey, setCopiedKey] = useState(null);
   const [codeType, setCodeType] = useState('tailwind4');
+
+  const isDark = theme === 'dark';
 
   const {
     cloneId,
@@ -74,36 +76,48 @@ export const CloneDashboard = ({ cloneData, onReset }) => {
   return (
     <div className="w-full max-w-7xl mx-auto space-y-6">
       {/* Overview Card */}
-      <div className="rounded-3xl border border-sky-500/20 bg-[#0c0c14]/90 p-6 shadow-2xl backdrop-blur-2xl">
+      <div
+        className={`rounded-3xl border p-6 shadow-xl transition ${
+          isDark
+            ? 'bg-[#0e0e18] border-white/10 text-white'
+            : 'bg-white border-slate-200 shadow-blue-500/5 text-slate-800'
+        }`}
+      >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
+          <div className="text-left">
             <div className="flex items-center gap-2 mb-1.5">
-              <span className="flex items-center gap-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 text-[11px] font-semibold text-emerald-400">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+              <span className="flex items-center gap-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
                 Clone Ready
               </span>
-              <span className="font-mono text-xs text-sky-400">
+              <span className="font-mono text-xs text-blue-600 dark:text-blue-400">
                 {elapsedMs ? `${(elapsedMs / 1000).toFixed(1)}s execution` : 'Success'}
               </span>
             </div>
-            <h2 className="text-2xl font-black tracking-tight text-white">{title || domain}</h2>
-            <p className="text-xs text-[#94a3b8] font-mono mt-0.5">{domain}</p>
+            <h2 className={`text-2xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              {title || domain}
+            </h2>
+            <p className="text-xs text-slate-400 font-mono mt-0.5">{domain}</p>
           </div>
 
           {/* Action Controls */}
           <div className="flex items-center gap-2.5 flex-wrap">
             <button
               onClick={handleDownloadHtml}
-              className="flex items-center gap-1.5 rounded-xl border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/20 px-4 py-2.5 text-xs font-bold text-sky-300 transition"
+              className={`flex items-center gap-1.5 rounded-xl border px-4 py-2.5 text-xs font-bold transition ${
+                isDark
+                  ? 'border-blue-500/30 bg-blue-500/10 hover:bg-blue-500/20 text-blue-300'
+                  : 'border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700'
+              }`}
             >
-              <Download className="h-4 w-4 text-sky-400" />
+              <Download className="h-4 w-4 text-blue-600" />
               <span>Download HTML</span>
             </button>
 
             <a
               href={downloadUrl}
               download={filename}
-              className="btn-antigravity flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-bold shadow-lg"
+              className="btn-webcloner flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-bold shadow-md"
             >
               <Archive className="h-4 w-4 fill-white" />
               <span>Download Full ZIP</span>
@@ -111,7 +125,11 @@ export const CloneDashboard = ({ cloneData, onReset }) => {
 
             <button
               onClick={onReset}
-              className="rounded-xl border border-white/[0.08] bg-transparent hover:bg-white/[0.04] px-3.5 py-2.5 text-xs text-[#94a3b8] hover:text-white transition"
+              className={`rounded-xl border px-3.5 py-2.5 text-xs transition ${
+                isDark
+                  ? 'border-white/10 hover:bg-white/5 text-slate-400 hover:text-white'
+                  : 'border-slate-200 hover:bg-slate-50 text-slate-500 hover:text-slate-800'
+              }`}
             >
               Clone Another
             </button>
@@ -119,38 +137,40 @@ export const CloneDashboard = ({ cloneData, onReset }) => {
         </div>
 
         {/* Quick Stats Grid */}
-        <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-3 border-t border-white/[0.08] pt-4 text-xs text-[#94a3b8]">
-          <div className="rounded-xl bg-white/[0.02] border border-white/[0.04] p-2.5">
-            <span className="text-[#64748b] block text-[10px] uppercase font-mono">Assets Extracted</span>
-            <strong className="text-white text-sm">{assets.length} items</strong>
+        <div className={`mt-5 grid grid-cols-2 sm:grid-cols-4 gap-3 border-t pt-4 text-xs ${isDark ? 'border-white/10' : 'border-slate-100'}`}>
+          <div className={`rounded-xl p-2.5 border text-left ${isDark ? 'bg-white/5 border-white/10' : 'bg-slate-50 border-slate-200'}`}>
+            <span className="text-slate-400 block text-[10px] uppercase font-mono">Assets Extracted</span>
+            <strong className={`text-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>{assets.length} items</strong>
           </div>
-          <div className="rounded-xl bg-white/[0.02] border border-white/[0.04] p-2.5">
-            <span className="text-[#64748b] block text-[10px] uppercase font-mono">Brand Colors</span>
-            <strong className="text-sky-300 text-sm">{tokens.colors?.length || 0} palettes</strong>
+          <div className={`rounded-xl p-2.5 border text-left ${isDark ? 'bg-white/5 border-white/10' : 'bg-slate-50 border-slate-200'}`}>
+            <span className="text-slate-400 block text-[10px] uppercase font-mono">Brand Colors</span>
+            <strong className="text-blue-600 text-sm">{tokens.colors?.length || 0} palettes</strong>
           </div>
-          <div className="rounded-xl bg-white/[0.02] border border-white/[0.04] p-2.5">
-            <span className="text-[#64748b] block text-[10px] uppercase font-mono">Web Fonts</span>
-            <strong className="text-purple-300 text-sm">{tokens.fonts?.length || 0} families</strong>
+          <div className={`rounded-xl p-2.5 border text-left ${isDark ? 'bg-white/5 border-white/10' : 'bg-slate-50 border-slate-200'}`}>
+            <span className="text-slate-400 block text-[10px] uppercase font-mono">Web Fonts</span>
+            <strong className="text-purple-600 text-sm">{tokens.fonts?.length || 0} families</strong>
           </div>
-          <div className="rounded-xl bg-white/[0.02] border border-white/[0.04] p-2.5">
-            <span className="text-[#64748b] block text-[10px] uppercase font-mono">Animations</span>
-            <strong className="text-emerald-400 text-sm">Active & Preserved</strong>
+          <div className={`rounded-xl p-2.5 border text-left ${isDark ? 'bg-white/5 border-white/10' : 'bg-slate-50 border-slate-200'}`}>
+            <span className="text-slate-400 block text-[10px] uppercase font-mono">Animations</span>
+            <strong className="text-emerald-600 text-sm">Active & Smooth</strong>
           </div>
         </div>
       </div>
 
       {/* Navigation Tabs Bar */}
-      <div className="flex items-center justify-between border-b border-white/[0.08] pb-1 overflow-x-auto">
+      <div className={`flex items-center justify-between border-b pb-1 overflow-x-auto ${isDark ? 'border-white/10' : 'border-slate-200'}`}>
         <div className="flex items-center gap-1.5">
           <button
             onClick={() => setActiveTab('preview')}
             className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold transition ${
               activeTab === 'preview'
-                ? 'bg-gradient-to-r from-sky-500/20 to-purple-600/20 text-sky-300 border border-sky-500/35 shadow-sm'
-                : 'text-[#94a3b8] hover:text-white hover:bg-white/[0.04]'
+                ? 'bg-blue-600 text-white shadow-sm'
+                : isDark
+                ? 'text-slate-400 hover:text-white hover:bg-white/5'
+                : 'text-slate-600 hover:text-blue-600 hover:bg-slate-100'
             }`}
           >
-            <Monitor className="h-3.5 w-3.5 text-sky-400" />
+            <Monitor className="h-3.5 w-3.5" />
             <span>Live Sandbox Preview</span>
           </button>
 
@@ -158,11 +178,13 @@ export const CloneDashboard = ({ cloneData, onReset }) => {
             onClick={() => setActiveTab('tailwind')}
             className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold transition ${
               activeTab === 'tailwind'
-                ? 'bg-gradient-to-r from-sky-500/20 to-purple-600/20 text-sky-300 border border-sky-500/35 shadow-sm'
-                : 'text-[#94a3b8] hover:text-white hover:bg-white/[0.04]'
+                ? 'bg-blue-600 text-white shadow-sm'
+                : isDark
+                ? 'text-slate-400 hover:text-white hover:bg-white/5'
+                : 'text-slate-600 hover:text-blue-600 hover:bg-slate-100'
             }`}
           >
-            <Code2 className="h-3.5 w-3.5 text-indigo-400" />
+            <Code2 className="h-3.5 w-3.5" />
             <span>Tailwind & Code</span>
           </button>
 
@@ -170,13 +192,16 @@ export const CloneDashboard = ({ cloneData, onReset }) => {
             onClick={() => setActiveTab('assets')}
             className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold transition ${
               activeTab === 'assets'
-                ? 'bg-gradient-to-r from-sky-500/20 to-purple-600/20 text-sky-300 border border-sky-500/35 shadow-sm'
-                : 'text-[#94a3b8] hover:text-white hover:bg-white/[0.04]'
+                ? 'bg-blue-600 text-white shadow-sm'
+                : isDark
+                ? 'text-slate-400 hover:text-white hover:bg-white/5'
+                : 'text-slate-600 hover:text-blue-600 hover:bg-slate-100'
             }`}
           >
-            <ImageIcon className="h-3.5 w-3.5 text-purple-400" />
+            <ImageIcon className="h-3.5 w-3.5" />
             <span>Asset Ripper ({assets.length})</span>
           </button>
+
 
           <button
             onClick={() => setActiveTab('tokens')}

@@ -370,7 +370,7 @@ html.lenis, html.lenis body {
     }, 2500);
   }
 
-  // 3. Golden Twinkling Sparkles 60fps Canvas Simulator
+  // 3. Lightweight Twinkling Sparkles Canvas (GPU-accelerated, zero shadowBlur lag)
   function initSparkleCanvases() {
     var canvases = document.querySelectorAll('canvas.pointer-events-none');
     canvases.forEach(function(canvas) {
@@ -388,49 +388,22 @@ html.lenis, html.lenis body {
       window.addEventListener('resize', resize, { passive: true });
 
       var particles = [];
-      var count = 35;
-      var colors = ['#f59e0b', '#fbbf24', '#fde68a', '#ffffff', '#ffd700'];
+      var count = 18;
+      var colors = ['#f59e0b', '#fbbf24', '#fde68a', '#ffffff'];
 
       for (var i = 0; i < count; i++) {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          size: Math.random() * 2.8 + 1,
+          size: Math.random() * 2 + 1,
           maxOpacity: Math.random() * 0.7 + 0.3,
           opacity: Math.random() * 0.8,
-          speedY: -(Math.random() * 0.3 + 0.1),
-          speedX: (Math.random() - 0.5) * 0.2,
-          pulseSpeed: Math.random() * 0.03 + 0.015,
+          speedY: -(Math.random() * 0.25 + 0.1),
+          speedX: (Math.random() - 0.5) * 0.15,
+          pulseSpeed: Math.random() * 0.02 + 0.01,
           color: colors[Math.floor(Math.random() * colors.length)],
-          isStar: Math.random() > 0.45
+          isStar: Math.random() > 0.5
         });
-      }
-
-      function drawStar4(cx, cy, spikes, outerRadius, innerRadius, color, alpha) {
-        var rot = Math.PI / 2 * 3;
-        var step = Math.PI / spikes;
-        ctx.save();
-        ctx.beginPath();
-        ctx.translate(cx, cy);
-        ctx.moveTo(0, 0 - outerRadius);
-        for (var i = 0; i < spikes; i++) {
-          var x = Math.cos(rot) * outerRadius;
-          var y = Math.sin(rot) * outerRadius;
-          ctx.lineTo(x, y);
-          rot += step;
-          x = Math.cos(rot) * innerRadius;
-          y = Math.sin(rot) * innerRadius;
-          ctx.lineTo(x, y);
-          rot += step;
-        }
-        ctx.lineTo(0, 0 - outerRadius);
-        ctx.closePath();
-        ctx.fillStyle = color;
-        ctx.globalAlpha = alpha;
-        ctx.shadowColor = color;
-        ctx.shadowBlur = outerRadius * 2.5;
-        ctx.fill();
-        ctx.restore();
       }
 
       function render() {
@@ -451,19 +424,13 @@ html.lenis, html.lenis body {
           if (p.x < 0) p.x = canvas.width;
           if (p.x > canvas.width) p.x = 0;
 
-          if (p.isStar) {
-            drawStar4(p.x, p.y, 4, p.size * 2.2, p.size * 0.7, p.color, Math.max(0, p.opacity));
-          } else {
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            ctx.fillStyle = p.color;
-            ctx.globalAlpha = Math.max(0, p.opacity);
-            ctx.shadowColor = p.color;
-            ctx.shadowBlur = p.size * 3;
-            ctx.fill();
-            ctx.restore();
-          }
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = Math.max(0, p.opacity);
+          ctx.fill();
+          ctx.restore();
         }
         requestAnimationFrame(render);
       }
@@ -553,40 +520,12 @@ html.lenis, html.lenis body {
     updateStack();
   }
 
-  // 6. Lenis Smooth Momentum Scrolling Integration
-  function initSmoothScroll() {
-    var currentY = window.scrollY;
-    var targetY = window.scrollY;
-    var isScrolling = false;
-
-    window.addEventListener('wheel', function(e) {
-      if (e.target.closest('[role="dialog"], .modal, pre, code')) return;
-      targetY += e.deltaY * 0.95;
-      targetY = Math.max(0, Math.min(targetY, document.body.scrollHeight - window.innerHeight));
-      if (!isScrolling) {
-        isScrolling = true;
-        requestAnimationFrame(smoothUpdate);
-      }
-    }, { passive: true });
-
-    function smoothUpdate() {
-      currentY += (targetY - currentY) * 0.12;
-      window.scrollTo(0, Math.round(currentY));
-      if (Math.abs(targetY - currentY) > 0.5) {
-        requestAnimationFrame(smoothUpdate);
-      } else {
-        isScrolling = false;
-      }
-    }
-  }
-
   function initAll() {
     initNavbar();
     initReveals();
     initSparkleCanvases();
     initHeroSwapper();
     initTestimonialStack();
-    initSmoothScroll();
   }
 
   if (document.readyState === 'loading') {
@@ -595,6 +534,7 @@ html.lenis, html.lenis body {
     initAll();
   }
 })();
+
 `;
       const body = docClone.querySelector('body') || docClone;
       body.appendChild(runtimeScript);

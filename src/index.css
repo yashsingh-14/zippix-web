@@ -1,26 +1,30 @@
 @import "tailwindcss";
 
 @layer base {
-  * {
-    border-color: rgba(255, 255, 255, 0.08);
-  }
   body {
-    background-color: #07070a;
-    color: #f8fafc;
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 }
 
-/* Antigravity Cyber Grid Background */
-.antigravity-bg {
+/* WebCloner Light Grid Background */
+.webcloner-grid-light {
+  background-color: #f8fafc;
+  background-image: 
+    linear-gradient(to right, rgba(99, 102, 241, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(99, 102, 241, 0.08) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* WebCloner Dark Cyber Grid Background */
+.webcloner-grid-dark {
   background-color: #07070a;
   background-image: 
-    radial-gradient(at 50% 0%, rgba(56, 189, 248, 0.15) 0px, transparent 65%),
-    radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.12) 0px, transparent 50%),
-    radial-gradient(at 0% 50%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+    radial-gradient(at 50% 0%, rgba(37, 99, 235, 0.15) 0px, transparent 65%),
+    radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.12) 0px, transparent 50%),
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 60px 60px, 60px 60px;
 }
 
 /* Custom Scrollbar */
@@ -32,59 +36,61 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(148, 163, 184, 0.4);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(56, 189, 248, 0.4);
+  background: rgba(37, 99, 235, 0.7);
 }
 
-/* Modern Antigravity Glowing Glass Panels */
-.glass-card {
-  background: rgba(14, 14, 22, 0.65);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-}
-
-.glass-card:hover {
-  border-color: rgba(56, 189, 248, 0.25);
-  box-shadow: 0 12px 40px -10px rgba(56, 189, 248, 0.12);
-}
-
-/* Gradient Shimmer on Buttons & Badges */
-.btn-antigravity {
-  background: linear-gradient(135deg, #0284c7 0%, #4f46e5 50%, #9333ea 100%);
+/* WebCloner Royal Blue Primary Button */
+.btn-webcloner {
+  background-color: #2563eb;
   color: #ffffff;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.25s ease-in-out;
+  font-weight: 700;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.3);
 }
 
-.btn-antigravity:hover {
-  background: linear-gradient(135deg, #38bdf8 0%, #6366f1 50%, #a855f7 100%);
-  box-shadow: 0 0 25px -4px rgba(56, 189, 248, 0.5);
+.btn-webcloner:hover {
+  background-color: #1d4ed8;
+  box-shadow: 0 6px 20px 0 rgba(37, 99, 235, 0.45);
   transform: translateY(-1px);
 }
 
-.btn-antigravity:active {
+.btn-webcloner:active {
   transform: translateY(0px) scale(0.98);
 }
 
-/* Glowing text gradients matching the logo */
-.text-logo-gradient {
-  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+/* WebCloner Gradient Headline */
+.text-webcloner-gradient {
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 50%, #7c3aed 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Ambient Pulse Glows */
-@keyframes ambientGlow {
-  0%, 100% { opacity: 0.4; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(1.05); }
+/* Infinite Marquee Track */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
 }
 
-.ambient-glow-circle {
-  animation: ambientGlow 8s ease-in-out infinite;
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Floating Badges Animation */
+@keyframes floatBadge {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+.float-badge {
+  animation: floatBadge 5s ease-in-out infinite;
 }
