@@ -1,11 +1,12 @@
 import { launchHeadlessBrowser } from './browser.js';
 
 /**
- * Zippix Enterprise Cloud Cloner Engine
- * - Full JS execution & hydration
- * - Smooth auto-scrolling to trigger lazy images, videos, and animations
- * - Full CSS stylesheet consolidation and URL resolution
- * - Design token & asset ripper extraction
+ * Zippix Enterprise Cloud Cloner Engine v2.0
+ * - Deep JavaScript execution & hydration
+ * - Intelligent Section-by-Section Auto-Scroll
+ * - IntersectionObserver Triggering & Sparkling Text Animation Preservation
+ * - Anti-Blank Fallbacks for clip-paths, reveals, and opacity
+ * - Stylesheet URL resolution & offline packaging
  */
 export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
   // Normalize URL
@@ -23,65 +24,86 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
   try {
     const page = await browser.newPage();
 
-    // Set standard human User-Agent
+    // Set standard human desktop User-Agent
     await page.setUserAgent(
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36'
     );
 
-    // Set standard headers
     await page.setExtraHTTPHeaders({
       'Accept-Language': 'en-US,en;q=0.9',
     });
 
     onProgress({ step: 2, message: `Navigating to ${domain} & waiting for network idle...`, progress: 30 });
     
-    // Navigate with graceful timeout
     try {
       await page.goto(validUrl, {
         waitUntil: ['domcontentloaded', 'networkidle2'],
-        timeout: 35000,
+        timeout: 40000,
       });
     } catch (navErr) {
-      // If networkidle2 timed out, verify if DOMContentLoaded loaded
       console.warn('Navigation warning (proceeding with loaded DOM):', navErr.message);
     }
 
-    onProgress({ step: 3, message: 'Executing smooth auto-scroll to trigger lazy images & animations...', progress: 50 });
+    onProgress({ step: 3, message: 'Executing deep section auto-scroll & triggering reveal animations...', progress: 50 });
 
-    // Smooth auto-scroll the entire webpage from top to bottom
+    // Section-by-section auto-scroll with intersection triggering
     await page.evaluate(async () => {
-      await new Promise((resolve) => {
-        let totalHeight = 0;
-        const distance = 350;
-        const maxScrolls = 40; // Prevent infinite loops on infinite scroll sites
-        let scrollCount = 0;
+      // 1. Scroll through all major sections to trigger lazy images, videos, and IntersectionObservers
+      const sections = Array.from(
+        document.querySelectorAll('section, header, footer, main, div[class*="section"], div[id], [class*="reveal"]')
+      );
 
-        const timer = setInterval(() => {
-          const scrollHeight = document.body.scrollHeight;
-          window.scrollBy(0, distance);
-          totalHeight += distance;
-          scrollCount++;
+      for (const sec of sections) {
+        try {
+          sec.scrollIntoView({ behavior: 'instant', block: 'center' });
+          window.dispatchEvent(new Event('scroll'));
+          await new Promise((r) => setTimeout(r, 70));
+        } catch {}
+      }
 
-          if (totalHeight >= scrollHeight || scrollCount >= maxScrolls) {
-            clearInterval(timer);
-            // Scroll back to top
-            window.scrollTo(0, 0);
-            resolve();
-          }
-        }, 120);
+      // Scroll to bottom
+      window.scrollTo(0, document.body.scrollHeight);
+      window.dispatchEvent(new Event('scroll'));
+      await new Promise((r) => setTimeout(r, 600));
+
+      // 2. Mark all reveal classes as revealed
+      const revealSelectors = [
+        '.reveal-on-scroll',
+        '.reveal-from-left',
+        '.reveal-from-right',
+        '.reveal-smoky-wave',
+        '.reveal-cinematic-sparkle',
+        '[class*="reveal-"]',
+        '[data-aos]',
+        '.elementor-invisible',
+      ];
+      document.querySelectorAll(revealSelectors.join(', ')).forEach((el) => {
+        el.classList.add('is-revealed', 'aos-animate');
+        el.classList.remove('elementor-invisible');
       });
+
+      // 3. Unblock any closed clip-paths or zero-opacity inline styles on text/content
+      document.querySelectorAll('*').forEach((el) => {
+        const style = el.getAttribute('style') || '';
+        if (style.includes('clip-path: polygon(0px 0px') || (style.includes('opacity: 0') && el.textContent.trim().length > 5)) {
+          el.style.clipPath = 'polygon(0 0, 100% 0, 100% 100%, 0 100%)';
+          el.style.opacity = '1';
+        }
+      });
+
+      // Scroll back to top
+      window.scrollTo(0, 0);
+      window.dispatchEvent(new Event('scroll'));
     });
 
-    // Short pause for any CSS animations or remaining image loads
     await new Promise((r) => setTimeout(r, 1200));
 
-    onProgress({ step: 4, message: 'Consolidating stylesheets & resolving relative assets...', progress: 70 });
+    onProgress({ step: 4, message: 'Consolidating stylesheets, sparkles & resolving relative assets...', progress: 75 });
 
     // Run in-page cloner to capture complete standalone HTML & design tokens
     const cloneResult = await page.evaluate((baseUrl) => {
       const base = new URL(baseUrl);
 
-      // Helper to resolve absolute URL
       function toAbsoluteUrl(relUrl) {
         if (!relUrl || relUrl.startsWith('data:') || relUrl.startsWith('blob:') || relUrl.startsWith('javascript:')) {
           return relUrl;
@@ -100,7 +122,6 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
           try {
             if (sheet.cssRules) {
               for (const rule of Array.from(sheet.cssRules)) {
-                // Rewrite any url(...) inside css
                 let cssText = rule.cssText;
                 cssText = cssText.replace(/url\((['"]?)(.*?)\1\)/gi, (match, quote, rel) => {
                   const abs = toAbsoluteUrl(rel.trim());
@@ -110,7 +131,7 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
               }
             }
           } catch {
-            // Cross-origin stylesheet: preserve link tag with absolute href
+            // Cross-origin stylesheet
           }
         }
       } catch (e) {
@@ -164,19 +185,126 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
         if (href) link.setAttribute('href', toAbsoluteUrl(href));
       });
 
+      // Anti-Blank & Reveal Normalization in Cloned DOM:
+      // 1. Mark reveal elements
+      docClone.querySelectorAll('.reveal-on-scroll, .reveal-from-left, .reveal-from-right, .reveal-smoky-wave, .reveal-cinematic-sparkle, [class*="reveal-"], [data-aos]').forEach((el) => {
+        el.classList.add('is-revealed', 'aos-animate');
+      });
+
+      // 2. Unblock any closed clip-paths or zero-opacity inline styles
+      docClone.querySelectorAll('*').forEach((el) => {
+        const style = el.getAttribute('style') || '';
+        if (style.includes('clip-path: polygon(0px 0px') || (style.includes('opacity: 0') && el.textContent.trim().length > 5)) {
+          el.style.clipPath = 'polygon(0 0, 100% 0, 100% 100%, 0 100%)';
+          el.style.opacity = '1';
+        }
+      });
+
+      // Universal Animation & Sparkle CSS Rules
+      const animationOverrides = `
+/* ========================================================
+   Zippix Universal Scroll & Reveal Animation Engine
+   ======================================================== */
+.reveal-on-scroll, .reveal-from-left, .reveal-from-right, .reveal-smoky-wave, .reveal-cinematic-sparkle {
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s ease-out !important;
+}
+.reveal-on-scroll.is-revealed, .reveal-from-left.is-revealed, .reveal-from-right.is-revealed {
+  opacity: 1 !important;
+  transform: translate(0px, 0px) rotate(0deg) scale(1) !important;
+  visibility: visible !important;
+}
+.reveal-smoky-wave.is-revealed {
+  opacity: 1 !important;
+  filter: blur(0px) brightness(1) !important;
+  transform: translate(0px, 0px) scale(1) rotate(0deg) !important;
+  visibility: visible !important;
+}
+.reveal-cinematic-sparkle.is-revealed {
+  opacity: 1 !important;
+  filter: drop-shadow(rgba(245, 158, 11, 0.22) 0px 4px 25px) brightness(1) !important;
+  transform: translate(0px, 0px) scale(1) rotate(0deg) !important;
+  visibility: visible !important;
+}
+@keyframes sparkleLightSweep { 
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.reveal-cinematic-sparkle.is-revealed .sparkle-text, .sparkle-text {
+  -webkit-text-fill-color: transparent !important;
+  background: linear-gradient(110deg, rgb(255, 255, 255) 0%, rgb(254, 243, 199) 20%, rgb(255, 255, 255) 38%, rgb(253, 230, 138) 48%, rgb(255, 255, 255) 52%, rgb(245, 158, 11) 68%, rgb(255, 255, 255) 85%, rgb(253, 230, 138) 100%) 0px 0px / 280% 100% text !important;
+  animation: 3s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal forwards running sparkleLightSweep !important;
+}
+/* Ensure clip-path doesn't leave blank sections */
+[style*="clip-path: polygon(0px 0px"] {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+`;
+
       // Inject consolidated CSS into <head>
       const styleTag = document.createElement('style');
       styleTag.setAttribute('id', 'zippix-consolidated-styles');
-      styleTag.textContent = gatheredCss;
+      styleTag.textContent = gatheredCss + '\n' + animationOverrides;
       const head = docClone.querySelector('head') || docClone.appendChild(document.createElement('head'));
       head.appendChild(styleTag);
+
+      // Inject client-side scroll observer script into the cloned document body
+      const scriptTag = document.createElement('script');
+      scriptTag.setAttribute('id', 'zippix-scroll-runtime');
+      scriptTag.textContent = `
+(function() {
+  function initZippixReveal() {
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed', 'aos-animate');
+            entry.target.style.opacity = '1';
+            if (entry.target.style.clipPath && entry.target.style.clipPath.includes('0px 0px')) {
+              entry.target.style.clipPath = 'polygon(0 0, 100% 0, 100% 100%, 0 100%)';
+            }
+          }
+        });
+      }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+      document.querySelectorAll('.reveal-on-scroll, .reveal-from-left, .reveal-from-right, .reveal-smoky-wave, .reveal-cinematic-sparkle, [class*="reveal-"], [data-aos]').forEach(function(el) {
+        observer.observe(el);
+      });
+    }
+
+    // Fallback: unblock any remaining invisible text after 1s
+    setTimeout(function() {
+      document.querySelectorAll('*').forEach(function(el) {
+        var s = window.getComputedStyle(el);
+        if ((s.opacity === '0' || s.visibility === 'hidden') && el.textContent.trim().length > 10) {
+          el.classList.add('is-revealed');
+          el.style.opacity = '1';
+          el.style.visibility = 'visible';
+          el.style.transform = 'none';
+          if (el.style.clipPath && el.style.clipPath.includes('0px 0px')) {
+            el.style.clipPath = 'polygon(0 0, 100% 0, 100% 100%, 0 100%)';
+          }
+        }
+      });
+    }, 1200);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initZippixReveal);
+  } else {
+    initZippixReveal();
+  }
+})();
+`;
+      const body = docClone.querySelector('body') || docClone;
+      body.appendChild(scriptTag);
 
       // Extract Design Tokens (Colors, Fonts, Assets)
       const colorsMap = new Map();
       const fontsMap = new Map();
       const assetsList = [];
 
-      // Color extraction helper
       function addColor(col) {
         if (!col || col === 'transparent' || col === 'inherit' || col.startsWith('rgba(0, 0, 0, 0)')) return;
         colorsMap.set(col, (colorsMap.get(col) || 0) + 1);
@@ -243,13 +371,11 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
         }
       });
 
-      // Format sorted colors
       const sortedColors = Array.from(colorsMap.entries())
         .sort((a, b) => b[1] - a[1])
         .slice(0, 24)
         .map(([value, count]) => ({ value, count }));
 
-      // Format sorted fonts
       const sortedFonts = Array.from(fontsMap.entries()).map(([name, info]) => ({
         family: name,
         weights: Array.from(info.weights),
@@ -265,11 +391,11 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
           colors: sortedColors,
           fonts: sortedFonts,
         },
-        assets: assetsList.slice(0, 100), // Cap at 100 top assets for performance
+        assets: assetsList.slice(0, 100),
       };
     }, validUrl);
 
-    onProgress({ step: 5, message: 'HTML and Design Tokens successfully captured!', progress: 90 });
+    onProgress({ step: 5, message: 'HTML and Design Tokens successfully captured!', progress: 95 });
 
     return {
       success: true,

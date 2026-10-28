@@ -7,21 +7,11 @@ export const Header = ({ freeClonesRemaining, isPro, onOpenProModal }) => {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand */}
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500/20 via-sky-500/20 to-purple-500/20 border border-white/[0.12] shadow-sm">
-            <svg viewBox="0 0 128 128" className="h-6 w-6">
-              <defs>
-                <linearGradient id="navLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#38bdf8" />
-                  <stop offset="50%" stopColor="#818cf8" />
-                  <stop offset="100%" stopColor="#c084fc" />
-                </linearGradient>
-              </defs>
-              <polygon points="64,28 94,45 64,62 34,45" fill="url(#navLogoGrad)" />
-              <polygon points="64,49 94,66 64,83 34,66" fill="#38bdf8" opacity="0.85" />
-              <polygon points="64,70 94,87 64,104 34,87" fill="#818cf8" />
-              <circle cx="64" cy="45" r="3.5" fill="#ffffff" />
-            </svg>
-          </div>
+          <img
+            src="/logo.svg"
+            alt="Zippix Logo"
+            className="h-10 w-10 object-contain drop-shadow-md hover:scale-105 transition duration-200"
+          />
           <div>
             <div className="flex items-center gap-2">
               <span className="text-base font-extrabold tracking-tight text-[#faf9f5]">Zippix</span>
