@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <defs>
+    <linearGradient id="favTop" x1="2" y1="2" x2="30" y2="18" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#38bdf8" />
+      <stop offset="50%" stopColor="#818cf8" />
+      <stop offset="100%" stopColor="#c084fc" />
+    </linearGradient>
+    <linearGradient id="favMid" x1="2" y1="9" x2="30" y2="25" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#0284c7" />
+      <stop offset="100%" stopColor="#4f46e5" />
+    </linearGradient>
+    <linearGradient id="favBot" x1="2" y1="16" x2="30" y2="31" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#3730a3" />
+      <stop offset="100%" stopColor="#7e22ce" />
+    </linearGradient>
+  </defs>
+
+  <!-- Bottom Layer (Chunky & Bold for 16x16 Favicon visibility) -->
+  <polygon points="2,22 16,30 30,22 16,14" fill="url(#favBot)" />
+  <polygon points="2,22 16,30 16,31.5 2,23.5" fill="#1e1b4b" />
+  <polygon points="16,30 30,22 30,23.5 16,31.5" fill="#3b0764" />
+
+  <!-- Middle Layer -->
+  <polygon points="2,15 16,23 30,15 16,7" fill="url(#favMid)" />
+  <polygon points="2,15 16,23 16,24.5 2,16.5" fill="#075985" />
+  <polygon points="16,23 30,15 30,16.5 16,24.5" fill="#312e81" />
+
+  <!-- Top Layer -->
+  <polygon points="2,8 16,16 30,8 16,0.5" fill="url(#favTop)" />
+  <polygon points="2,8 16,16 16,17.5 2,9.5" fill="#0369a1" />
+  <polygon points="16,16 30,8 30,9.5 16,17.5" fill="#4338ca" />
+
+  <!-- Glowing Center Vertex Core -->
+  <circle cx="16" cy="8.2" r="2.2" fill="#ffffff" />
+</svg>
