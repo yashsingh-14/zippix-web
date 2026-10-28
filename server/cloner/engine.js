@@ -1,12 +1,12 @@
 import { launchHeadlessBrowser } from './browser.js';
 
 /**
- * Zippix Enterprise Cloud Cloner Engine v2.0
- * - Deep JavaScript execution & hydration
- * - Intelligent Section-by-Section Auto-Scroll
- * - IntersectionObserver Triggering & Sparkling Text Animation Preservation
- * - Anti-Blank Fallbacks for clip-paths, reveals, and opacity
- * - Stylesheet URL resolution & offline packaging
+ * Zippix Enterprise Cloud Cloner Engine v3.0
+ * - Deep JavaScript execution & React/Next.js hydration
+ * - Full section auto-scroll triggering all IntersectionObservers
+ * - Preserves scroll-triggered reveals, sparkling text sweep, and smooth animations
+ * - Bundles embedded Lenis smooth-scroll & IntersectionObserver in the clone
+ * - Anti-blank normalizer ensuring zero content is cut off or permanently hidden
  */
 export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
   // Normalize URL
@@ -46,9 +46,9 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
 
     onProgress({ step: 3, message: 'Executing deep section auto-scroll & triggering reveal animations...', progress: 50 });
 
-    // Section-by-section auto-scroll with intersection triggering
+    // Step-by-step auto-scroll to trigger lazy images, videos, and dynamic components
     await page.evaluate(async () => {
-      // 1. Scroll through all major sections to trigger lazy images, videos, and IntersectionObservers
+      // 1. Scroll through all major sections
       const sections = Array.from(
         document.querySelectorAll('section, header, footer, main, div[class*="section"], div[id], [class*="reveal"]')
       );
@@ -57,50 +57,25 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
         try {
           sec.scrollIntoView({ behavior: 'instant', block: 'center' });
           window.dispatchEvent(new Event('scroll'));
-          await new Promise((r) => setTimeout(r, 70));
+          await new Promise((r) => setTimeout(r, 60));
         } catch {}
       }
 
       // Scroll to bottom
       window.scrollTo(0, document.body.scrollHeight);
       window.dispatchEvent(new Event('scroll'));
-      await new Promise((r) => setTimeout(r, 600));
+      await new Promise((r) => setTimeout(r, 800));
 
-      // 2. Mark all reveal classes as revealed
-      const revealSelectors = [
-        '.reveal-on-scroll',
-        '.reveal-from-left',
-        '.reveal-from-right',
-        '.reveal-smoky-wave',
-        '.reveal-cinematic-sparkle',
-        '[class*="reveal-"]',
-        '[data-aos]',
-        '.elementor-invisible',
-      ];
-      document.querySelectorAll(revealSelectors.join(', ')).forEach((el) => {
-        el.classList.add('is-revealed', 'aos-animate');
-        el.classList.remove('elementor-invisible');
-      });
-
-      // 3. Unblock any closed clip-paths or zero-opacity inline styles on text/content
-      document.querySelectorAll('*').forEach((el) => {
-        const style = el.getAttribute('style') || '';
-        if (style.includes('clip-path: polygon(0px 0px') || (style.includes('opacity: 0') && el.textContent.trim().length > 5)) {
-          el.style.clipPath = 'polygon(0 0, 100% 0, 100% 100%, 0 100%)';
-          el.style.opacity = '1';
-        }
-      });
-
-      // Scroll back to top
+      // Scroll smoothly back to top
       window.scrollTo(0, 0);
       window.dispatchEvent(new Event('scroll'));
     });
 
-    await new Promise((r) => setTimeout(r, 1200));
+    await new Promise((r) => setTimeout(r, 1000));
 
     onProgress({ step: 4, message: 'Consolidating stylesheets, sparkles & resolving relative assets...', progress: 75 });
 
-    // Run in-page cloner to capture complete standalone HTML & design tokens
+    // Capture complete standalone HTML, styles, and tokens
     const cloneResult = await page.evaluate((baseUrl) => {
       const base = new URL(baseUrl);
 
@@ -185,14 +160,11 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
         if (href) link.setAttribute('href', toAbsoluteUrl(href));
       });
 
-      // Anti-Blank & Reveal Normalization in Cloned DOM:
-      // 1. Mark reveal elements
-      docClone.querySelectorAll('.reveal-on-scroll, .reveal-from-left, .reveal-from-right, .reveal-smoky-wave, .reveal-cinematic-sparkle, [class*="reveal-"], [data-aos]').forEach((el) => {
-        el.classList.add('is-revealed', 'aos-animate');
-      });
-
-      // 2. Unblock any closed clip-paths or zero-opacity inline styles
+      // Reveal elements:
+      // Notice: Only reveal elements that are at the TOP of the page (in view on load).
+      // Elements below the fold keep their initial class so they ANIMATE on scroll!
       docClone.querySelectorAll('*').forEach((el) => {
+        // Unblock closed clip-paths or zero-opacity inline styles so they aren't stuck closed
         const style = el.getAttribute('style') || '';
         if (style.includes('clip-path: polygon(0px 0px') || (style.includes('opacity: 0') && el.textContent.trim().length > 5)) {
           el.style.clipPath = 'polygon(0 0, 100% 0, 100% 100%, 0 100%)';
@@ -203,10 +175,24 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
       // Universal Animation & Sparkle CSS Rules
       const animationOverrides = `
 /* ========================================================
-   Zippix Universal Scroll & Reveal Animation Engine
+   Zippix Universal Scroll & Reveal Animation Engine v3.0
    ======================================================== */
+html.lenis, html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Base Reveal Class Transitions */
 .reveal-on-scroll, .reveal-from-left, .reveal-from-right, .reveal-smoky-wave, .reveal-cinematic-sparkle {
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s ease-out !important;
+  transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1), filter 1.2s ease-out !important;
 }
 .reveal-on-scroll.is-revealed, .reveal-from-left.is-revealed, .reveal-from-right.is-revealed {
   opacity: 1 !important;
@@ -225,6 +211,8 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
   transform: translate(0px, 0px) scale(1) rotate(0deg) !important;
   visibility: visible !important;
 }
+
+/* Sparkling golden text sweep animation */
 @keyframes sparkleLightSweep { 
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
@@ -232,9 +220,10 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
 .reveal-cinematic-sparkle.is-revealed .sparkle-text, .sparkle-text {
   -webkit-text-fill-color: transparent !important;
   background: linear-gradient(110deg, rgb(255, 255, 255) 0%, rgb(254, 243, 199) 20%, rgb(255, 255, 255) 38%, rgb(253, 230, 138) 48%, rgb(255, 255, 255) 52%, rgb(245, 158, 11) 68%, rgb(255, 255, 255) 85%, rgb(253, 230, 138) 100%) 0px 0px / 280% 100% text !important;
-  animation: 3s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal forwards running sparkleLightSweep !important;
+  animation: 3.2s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal forwards running sparkleLightSweep !important;
 }
-/* Ensure clip-path doesn't leave blank sections */
+
+/* Fallback for closed clip-paths */
 [style*="clip-path: polygon(0px 0px"] {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%) !important;
   opacity: 1 !important;
@@ -249,12 +238,39 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
       const head = docClone.querySelector('head') || docClone.appendChild(document.createElement('head'));
       head.appendChild(styleTag);
 
-      // Inject client-side scroll observer script into the cloned document body
+      // Inject client-side Lenis Smooth Scroll CDN & Universal Scroll Reveal Engine
       const scriptTag = document.createElement('script');
       scriptTag.setAttribute('id', 'zippix-scroll-runtime');
       scriptTag.textContent = `
 (function() {
-  function initZippixReveal() {
+  // 1. Load Lenis Smooth Scroll dynamically for buttery momentum physics
+  function loadLenis() {
+    var lenisScript = document.createElement('script');
+    lenisScript.src = 'https://unpkg.com/lenis@1.1.20/dist/lenis.min.js';
+    lenisScript.onload = function() {
+      if (typeof Lenis !== 'undefined') {
+        var lenis = new Lenis({
+          duration: 1.2,
+          easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
+          orientation: 'vertical',
+          smoothWheel: true
+        });
+        function raf(time) {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+      }
+    };
+    document.head.appendChild(lenisScript);
+  }
+
+  // 2. Intelligent IntersectionObserver for Scroll Reveals & Text Sparkles
+  function initScrollReveals() {
+    var revealElements = document.querySelectorAll(
+      '.reveal-on-scroll, .reveal-from-left, .reveal-from-right, .reveal-smoky-wave, .reveal-cinematic-sparkle, [class*="reveal-"], [data-aos]'
+    );
+
     if ('IntersectionObserver' in window) {
       var observer = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
@@ -266,14 +282,30 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
             }
           }
         });
-      }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+      }, {
+        threshold: 0.12,
+        rootMargin: '0px 0px -40px 0px'
+      });
 
-      document.querySelectorAll('.reveal-on-scroll, .reveal-from-left, .reveal-from-right, .reveal-smoky-wave, .reveal-cinematic-sparkle, [class*="reveal-"], [data-aos]').forEach(function(el) {
-        observer.observe(el);
+      revealElements.forEach(function(el) {
+        // If element is already in the initial viewport on load, reveal it now
+        var rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          el.classList.add('is-revealed', 'aos-animate');
+          el.style.opacity = '1';
+        } else {
+          observer.observe(el);
+        }
+      });
+    } else {
+      // Fallback: reveal all
+      revealElements.forEach(function(el) {
+        el.classList.add('is-revealed', 'aos-animate');
+        el.style.opacity = '1';
       });
     }
 
-    // Fallback: unblock any remaining invisible text after 1s
+    // Safety fallback: after 2s, ensure no section remains blank
     setTimeout(function() {
       document.querySelectorAll('*').forEach(function(el) {
         var s = window.getComputedStyle(el);
@@ -287,13 +319,17 @@ export async function cloneWebsiteUrl(targetUrl, onProgress = () => {}) {
           }
         }
       });
-    }, 1200);
+    }, 2000);
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initZippixReveal);
+    document.addEventListener('DOMContentLoaded', function() {
+      loadLenis();
+      initScrollReveals();
+    });
   } else {
-    initZippixReveal();
+    loadLenis();
+    initScrollReveals();
   }
 })();
 `;
