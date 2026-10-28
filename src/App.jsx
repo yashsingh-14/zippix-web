@@ -150,30 +150,33 @@ export default function App() {
 
       {/* Main Experience Body */}
       <main className="flex-1 w-full space-y-24 relative z-10">
-        {/* Hero Section with Animated Floating 3D Logo Background */}
-        <section id="cloner-section" className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 text-center pt-16 sm:pt-20 lg:pt-24 space-y-8 sm:space-y-10 relative">
+        {/* Hero Section: Centered vertically within viewport so 100% of content & presets fit on one screen */}
+        <section
+          id="cloner-section"
+          className="mx-auto max-w-5xl lg:max-w-6xl px-4 sm:px-6 lg:px-8 text-center min-h-[calc(100vh-4.5rem)] flex flex-col items-center justify-center py-4 sm:py-6 space-y-4 sm:space-y-5 relative"
+        >
           {/* Animated 3D Floating Isometric Logo Plate System */}
           <AnimatedHeroLogo />
 
           {/* Subtle Indicator Pill */}
-          <div className="inline-flex items-center gap-2.5 rounded-full apple-glass-pill px-5 py-2 text-xs sm:text-sm font-medium text-slate-300">
+          <div className="inline-flex items-center gap-2 rounded-full apple-glass-pill px-4 py-1 text-xs font-medium text-slate-300">
             <span className="h-2 w-2 rounded-full bg-sky-400 animate-pulse" />
             <span>Instant Website Cloner</span>
           </div>
 
-          {/* Master Headline - Expanded & Breathable */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.14] sm:leading-[1.18] text-white max-w-5xl mx-auto">
+          {/* Master Headline */}
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.12] text-white max-w-4xl mx-auto">
             Clone Any Website into <br className="hidden sm:inline" />
             <span className="text-gradient-logo">Clean Code & ZIP</span>
           </h1>
 
-          {/* Minimal 1-Sentence Subtitle - Expanded & Breathable */}
-          <p className="mx-auto max-w-2xl text-base sm:text-lg text-slate-400 leading-relaxed font-normal">
+          {/* Minimal 1-Sentence Subtitle */}
+          <p className="mx-auto max-w-xl text-sm sm:text-base text-slate-400 leading-relaxed font-normal">
             Enter any URL to extract clean HTML, modern CSS styling, and offline assets in seconds.
           </p>
 
-          {/* Expanded Command Console */}
-          <div className="pt-2 sm:pt-4">
+          {/* Command Console with Presets */}
+          <div className="w-full pt-1 sm:pt-2">
             <UrlInputBar onClone={handleClone} isLoading={isLoading} />
           </div>
 
