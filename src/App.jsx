@@ -119,27 +119,14 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col zippix-canvas text-slate-100 overflow-x-hidden selection:bg-blue-500/30 selection:text-blue-200">
-      {/* SVG Gooey Liquid Filter for Skilluno Ferrofluid Effect */}
-      <svg width="0" height="0" className="absolute pointer-events-none" style={{ position: 'absolute' }}>
-        <filter id="ferrofluid">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="24" result="blur" />
-          <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 32 -10" result="goo" />
-          <feComposite in="SourceGraphic" in2="goo" operator="atop" />
-        </filter>
-      </svg>
+    <div className="relative min-h-screen flex flex-col zippix-canvas text-slate-100 overflow-x-hidden selection:bg-sky-500/30 selection:text-sky-200">
+      {/* Signature Logo-Matched Ambient Light Mesh */}
+      <div className="logo-ambient-mesh" />
 
-      {/* Ferrofluid Liquid Morphing Hero Background (from Skilluno) */}
-      <div className="ferrofluid-canvas">
-        <div className="globule globule-1" />
-        <div className="globule globule-2" />
-        <div className="globule globule-3" />
-      </div>
-
-      {/* Signature Atmospheric Side Glow Auras */}
-      <div className="fixed top-24 -left-48 w-[650px] h-[650px] rounded-full bg-blue-600/20 blur-[160px] pointer-events-none -z-10" />
-      <div className="fixed top-[40%] -right-48 w-[550px] h-[550px] rounded-full bg-indigo-600/20 blur-[170px] pointer-events-none -z-10" />
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[900px] h-[350px] rounded-full bg-blue-500/10 blur-[140px] pointer-events-none -z-10" />
+      {/* Subtle Atmospheric Side Glow Auras matching logo (#38bdf8, #6366f1, #c084fc) */}
+      <div className="fixed top-20 -left-48 w-[600px] h-[600px] rounded-full bg-sky-500/15 blur-[160px] pointer-events-none -z-10" />
+      <div className="fixed top-[35%] -right-48 w-[550px] h-[550px] rounded-full bg-indigo-500/15 blur-[170px] pointer-events-none -z-10" />
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[850px] h-[300px] rounded-full bg-sky-400/10 blur-[140px] pointer-events-none -z-10" />
 
       {/* Apple Glassmorphism Header */}
       <Header
@@ -156,28 +143,26 @@ export default function App() {
 
       {/* Main Experience Body */}
       <main className="flex-1 w-full space-y-20 relative z-10">
-        {/* Hero Section */}
-        <section id="cloner-section" className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center pt-14 sm:pt-22 space-y-7 relative">
-          {/* Announcement Badge with Apple Glassmorphism */}
-          <div className="inline-flex items-center gap-2 rounded-full apple-glass-pill px-4 py-1.5 text-xs font-semibold text-blue-300 shadow-sm">
-            <Sparkles className="h-3.5 w-3.5 text-blue-400" />
-            <span>Zippix Cloud Engine v2.0 • Headless Web Reconstructor</span>
+        {/* Hero Section: Ultra-Clean, Minimal, Matching Logo */}
+        <section id="cloner-section" className="mx-auto max-w-4xl px-4 sm:px-6 text-center pt-14 sm:pt-20 space-y-6 relative">
+          {/* Subtle Indicator Pill */}
+          <div className="inline-flex items-center gap-2 rounded-full apple-glass-pill px-3.5 py-1 text-xs font-medium text-slate-300">
+            <span className="h-1.5 w-1.5 rounded-full bg-sky-400 animate-pulse" />
+            <span>Instant Website Cloner</span>
           </div>
 
           {/* Master Headline */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] text-white">
-            Turn Any Webpage into{' '}
-            <br className="hidden sm:inline" />
-            <span className="text-gradient-electric">Production-Ready Code</span> & Offline ZIP
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-[1.08] text-white">
+            Clone Any Website into <br />
+            <span className="text-gradient-logo">Clean Code & ZIP</span>
           </h1>
 
-          {/* Subtitle */}
-          <p className="mx-auto max-w-3xl text-sm sm:text-base text-slate-400 leading-relaxed font-normal">
-            Extract pixel-perfect HTML, production-ready Tailwind CSS design tokens, dynamic 60 FPS animation layers,
-            and self-contained offline media in single-click headless execution.
+          {/* Minimal 1-Sentence Subtitle */}
+          <p className="mx-auto max-w-xl text-sm sm:text-base text-slate-400 leading-relaxed font-normal">
+            Enter any URL to extract clean HTML, modern CSS styling, and offline assets in seconds.
           </p>
 
-          {/* Reconstructor Command Console */}
+          {/* Minimal Command Console */}
           <div className="pt-2">
             <UrlInputBar onClone={handleClone} isLoading={isLoading} />
           </div>
