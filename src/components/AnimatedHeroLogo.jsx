@@ -2,12 +2,12 @@ import React from 'react';
 
 export const AnimatedHeroLogo = () => {
   return (
-    <div className="absolute top-[48%] sm:top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[460px] sm:w-[680px] md:w-[840px] lg:w-[960px] h-[460px] sm:h-[680px] md:h-[840px] lg:h-[960px] pointer-events-none select-none -z-10 opacity-24 sm:opacity-28 transition-all duration-700">
+    <div className="absolute top-[48%] sm:top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] sm:w-[460px] md:w-[540px] lg:w-[600px] h-[340px] sm:h-[460px] md:h-[540px] lg:h-[600px] pointer-events-none select-none -z-10 opacity-22 sm:opacity-26 transition-all duration-700">
       <svg
         viewBox="0 -10 128 138"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-full overflow-visible filter drop-shadow-[0_0_100px_rgba(56,189,248,0.35)]"
+        className="w-full h-full overflow-visible filter drop-shadow-[0_0_90px_rgba(56,189,248,0.3)]"
       >
         <defs>
           {/* Top Layer Gradient (Vibrant Sky to Purple) */}
@@ -37,7 +37,7 @@ export const AnimatedHeroLogo = () => {
 
           {/* Atmospheric Layer Shadow */}
           <filter id="heroLayerShadow" x="-20%" y="-20%" width="140%" height="150%">
-            <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="#000000" floodOpacity="0.55" />
+            <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="#000000" floodOpacity="0.5" />
           </filter>
         </defs>
 
