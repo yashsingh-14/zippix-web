@@ -1,14 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Header } from './components/Header.jsx';
+import { AnimatedHeroLogo } from './components/AnimatedHeroLogo.jsx';
 import { UrlInputBar } from './components/UrlInputBar.jsx';
-import { TechStackTicker } from './components/TechStackTicker.jsx';
-import { EngineMatrix } from './components/EngineMatrix.jsx';
 import { StudioPlayground } from './components/StudioPlayground.jsx';
-import { WorkflowPipelines } from './components/WorkflowPipelines.jsx';
-import { CloudPipelineSteps } from './components/CloudPipelineSteps.jsx';
-import { EngineeringBenchmarks } from './components/EngineeringBenchmarks.jsx';
 import { FaqSection } from './components/FaqSection.jsx';
-import { BottomTerminalCta } from './components/BottomTerminalCta.jsx';
 import { CloneProgress } from './components/CloneProgress.jsx';
 import { CloneDashboard } from './components/CloneDashboard.jsx';
 import { AuthModal } from './components/AuthModal.jsx';
@@ -17,7 +12,6 @@ import { AboutModal } from './components/AboutModal.jsx';
 import { PrivacyModal } from './components/PrivacyModal.jsx';
 import { TermsModal } from './components/TermsModal.jsx';
 import { ContactModal } from './components/ContactModal.jsx';
-import { Sparkles } from 'lucide-react';
 
 export default function App() {
   const [url, setUrl] = useState('');
@@ -128,7 +122,7 @@ export default function App() {
       <div className="fixed top-[35%] -right-48 w-[550px] h-[550px] rounded-full bg-indigo-500/15 blur-[170px] pointer-events-none -z-10" />
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[850px] h-[300px] rounded-full bg-sky-400/10 blur-[140px] pointer-events-none -z-10" />
 
-      {/* Apple Glassmorphism Header */}
+      {/* Sundown-Inspired Apple Glassmorphism Header */}
       <Header
         user={user}
         onOpenAuth={() => setIsAuthOpen(true)}
@@ -142,11 +136,14 @@ export default function App() {
       />
 
       {/* Main Experience Body */}
-      <main className="flex-1 w-full space-y-20 relative z-10">
-        {/* Hero Section: Ultra-Clean, Minimal, Matching Logo */}
-        <section id="cloner-section" className="mx-auto max-w-4xl px-4 sm:px-6 text-center pt-14 sm:pt-20 space-y-6 relative">
+      <main className="flex-1 w-full space-y-24 relative z-10">
+        {/* Hero Section with Animated Floating 3D Logo Background */}
+        <section id="cloner-section" className="mx-auto max-w-4xl px-4 sm:px-6 text-center pt-16 sm:pt-24 space-y-7 relative">
+          {/* Animated 3D Floating Isometric Logo Plate System */}
+          <AnimatedHeroLogo />
+
           {/* Subtle Indicator Pill */}
-          <div className="inline-flex items-center gap-2 rounded-full apple-glass-pill px-3.5 py-1 text-xs font-medium text-slate-300">
+          <div className="inline-flex items-center gap-2 rounded-full apple-glass-pill px-4 py-1.5 text-xs font-medium text-slate-300">
             <span className="h-1.5 w-1.5 rounded-full bg-sky-400 animate-pulse" />
             <span>Instant Website Cloner</span>
           </div>
@@ -169,7 +166,7 @@ export default function App() {
 
           {/* Error Banner */}
           {error && (
-            <div className="mx-auto max-w-xl rounded-2xl border border-red-500/40 bg-red-950/40 p-4 text-xs text-red-200 text-center backdrop-blur-md">
+            <div className="mx-auto max-w-xl rounded-2xl border border-red-500/30 bg-red-950/40 p-3.5 text-xs text-red-200 text-center backdrop-blur-md">
               {error}
             </div>
           )}
@@ -189,34 +186,16 @@ export default function App() {
           </div>
         )}
 
-        {/* Engineering Specifications Ticker */}
-        <TechStackTicker />
-
-        {/* Interactive Engine Capabilities Matrix */}
-        <EngineMatrix />
-
         {/* Interactive Studio Playground & Viewport Sandbox */}
         <StudioPlayground />
 
-        {/* Real-World Production Pipelines */}
-        <WorkflowPipelines />
-
-        {/* 3-Phase Reconstruction Lifecycle */}
-        <CloudPipelineSteps />
-
-        {/* Engineering Benchmarks & Feedback */}
-        <EngineeringBenchmarks />
-
         {/* Technical FAQ */}
         <FaqSection />
-
-        {/* Cyber Bottom Terminal Launchpad */}
-        <BottomTerminalCta onLaunchUrl={(target) => handleClone(target, 'standard')} />
       </main>
 
       {/* Engineering Footer with Apple Glassmorphism */}
-      <footer className="border-t border-white/[0.08] py-12 bg-[#020408]/95 text-slate-400 relative z-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8">
+      <footer className="border-t border-white/[0.08] py-12 bg-[#020408]/95 text-slate-400 relative z-10 mt-20">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 space-y-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-white/[0.06]">
             <div className="flex items-center gap-3">
               <img src="/logo.svg" alt="Zippix Logo" className="h-8 w-8 object-contain" />
@@ -227,16 +206,16 @@ export default function App() {
             </div>
 
             <div className="flex flex-wrap items-center gap-6 text-xs font-medium">
-              <button onClick={() => setIsPrivacyOpen(true)} className="hover:text-blue-400 transition">
+              <button onClick={() => setIsPrivacyOpen(true)} className="hover:text-sky-400 transition">
                 Privacy Policy
               </button>
-              <button onClick={() => setIsTermsOpen(true)} className="hover:text-blue-400 transition">
+              <button onClick={() => setIsTermsOpen(true)} className="hover:text-sky-400 transition">
                 Terms of Use
               </button>
-              <button onClick={() => setIsContactOpen(true)} className="hover:text-blue-400 transition">
+              <button onClick={() => setIsContactOpen(true)} className="hover:text-sky-400 transition">
                 Contact Support
               </button>
-              <button onClick={() => setIsAboutOpen(true)} className="hover:text-blue-400 transition">
+              <button onClick={() => setIsAboutOpen(true)} className="hover:text-sky-400 transition">
                 About Zippix
               </button>
             </div>

@@ -21,59 +21,50 @@ export const Header = ({
 
   return (
     <header className="sticky top-0 z-50 w-full apple-glass-nav transition-all">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        {/* Brand: Logo + Clean Minimal Wordmark */}
+      <div className="mx-auto flex h-18 max-w-6xl items-center justify-between px-4 sm:px-6">
+        {/* Brand: Logo + Clean Wordmark */}
         <div
-          className="flex items-center gap-2.5 cursor-pointer group select-none"
+          className="flex items-center gap-3 cursor-pointer group select-none shrink-0"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
           <img
             src="/logo.svg"
             alt="Zippix"
-            className="h-7 w-7 object-contain transition duration-200 group-hover:scale-105"
+            className="h-8 w-8 object-contain transition duration-300 group-hover:scale-105 filter drop-shadow-[0_2px_10px_rgba(56,189,248,0.3)]"
           />
-          <span className="text-base font-bold tracking-tight text-white group-hover:text-sky-300 transition">
+          <span className="text-lg font-bold tracking-tight text-white group-hover:text-sky-300 transition">
             Zippix
           </span>
         </div>
 
-        {/* Clean, Minimal Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8 text-xs font-medium text-slate-300">
-          <button
-            onClick={() => scrollTo('engine-matrix')}
-            className="hover:text-white transition"
-          >
-            Features
-          </button>
+        {/* Desktop Nav Items: Sundown Studio Inspired Pills */}
+        <div className="hidden md:flex items-center gap-2.5">
           <button
             onClick={() => scrollTo('studio-playground')}
-            className="hover:text-white transition"
+            className="sundown-nav-pill"
           >
-            Studio
+            <span>Studio</span>
           </button>
           <button
             onClick={() => scrollTo('faq-section')}
-            className="hover:text-white transition"
+            className="sundown-nav-pill"
           >
-            FAQ
+            <span>FAQ</span>
           </button>
-        </nav>
 
-        {/* Clean Right Actions */}
-        <div className="flex items-center gap-3">
           {user ? (
             <div className="relative">
               <button
                 onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                className="flex items-center gap-2 rounded-full py-1 px-2.5 apple-glass-pill hover:border-white/25 transition"
+                className="flex items-center gap-2 rounded-full py-1.5 px-3 apple-glass-pill hover:border-white/30 transition text-xs"
               >
                 <img
                   src={user.avatar || '/logo.svg'}
                   alt={user.name}
-                  className="h-6 w-6 rounded-full border border-white/15 bg-blue-950 object-cover"
+                  className="h-5 w-5 rounded-full border border-white/20 bg-blue-950 object-cover"
                 />
-                <span className="text-xs font-semibold text-white hidden sm:inline">{user.name}</span>
-                <ChevronDown className="h-3 w-3 text-slate-400 hidden sm:inline" />
+                <span className="font-semibold text-white">{user.name}</span>
+                <ChevronDown className="h-3 w-3 text-slate-400" />
               </button>
 
               {userDropdownOpen && (
@@ -108,54 +99,61 @@ export const Header = ({
           ) : (
             <button
               onClick={onOpenAuth}
-              className="text-xs font-medium text-slate-300 hover:text-white transition px-2.5 py-1.5"
+              className="sundown-nav-pill"
             >
-              Sign In
+              <span>Sign In</span>
             </button>
           )}
 
-          {/* Minimal Action Button */}
+          {/* Primary CTA Pill with Sundown White Bubble Roll */}
           <button
             onClick={() => {
               const el = document.getElementById('cloner-section');
               if (el) el.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="btn-zippix-primary rounded-full px-4 py-1.5 text-xs font-semibold flex items-center gap-1.5"
+            className="sundown-nav-pill-primary ml-1"
           >
             <span>Start Free</span>
-            <ArrowRight className="h-3 w-3" />
+            <ArrowRight className="h-3.5 w-3.5" />
+          </button>
+        </div>
+
+        {/* Mobile Nav Right: Start Free + Menu Pill */}
+        <div className="flex md:hidden items-center gap-2">
+          <button
+            onClick={() => {
+              const el = document.getElementById('cloner-section');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="sundown-nav-pill-primary px-3 py-1.5 text-xs"
+          >
+            <span>Start Free</span>
           </button>
 
-          {/* Mobile Menu Toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-1.5 text-slate-400 hover:text-white"
+            className="sundown-nav-pill px-3 py-1.5 text-xs flex items-center gap-1.5"
           >
-            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {mobileMenuOpen ? <X className="h-3.5 w-3.5" /> : <Menu className="h-3.5 w-3.5" />}
+            <span>Menu</span>
           </button>
         </div>
       </div>
 
-      {/* Clean Minimal Mobile Drawer */}
+      {/* Clean Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-white/[0.06] bg-[#020408]/95 backdrop-blur-2xl px-6 py-4 space-y-2 text-sm">
-          <button
-            onClick={() => scrollTo('engine-matrix')}
-            className="block w-full text-left py-1.5 text-slate-300 hover:text-white"
-          >
-            Features
-          </button>
+        <div className="md:hidden border-t border-white/[0.06] bg-[#020408]/98 backdrop-blur-2xl px-6 py-4 space-y-3 text-sm">
           <button
             onClick={() => scrollTo('studio-playground')}
-            className="block w-full text-left py-1.5 text-slate-300 hover:text-white"
+            className="block w-full text-left py-2 text-slate-300 hover:text-white"
           >
-            Studio
+            Studio Sandbox
           </button>
           <button
             onClick={() => scrollTo('faq-section')}
-            className="block w-full text-left py-1.5 text-slate-300 hover:text-white"
+            className="block w-full text-left py-2 text-slate-300 hover:text-white"
           >
-            FAQ
+            Frequently Asked Questions
           </button>
           <div className="pt-3 border-t border-white/[0.06] flex items-center justify-between">
             {!user ? (
@@ -166,7 +164,7 @@ export const Header = ({
                 }}
                 className="text-xs font-semibold text-sky-400"
               >
-                Sign In
+                Sign In / Register
               </button>
             ) : (
               <button
