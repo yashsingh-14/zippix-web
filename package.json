@@ -1,7 +1,7 @@
 {
   "name": "zippix-web",
   "version": "1.0.0",
-  "description": "Zippix Web - AI-Powered Cloud Webpage Cloner & Token Ripper",
+    "description": "Zippix - Instant Website Cloner & Code Exporter",
   "main": "server/index.js",
   "type": "module",
   "scripts": {

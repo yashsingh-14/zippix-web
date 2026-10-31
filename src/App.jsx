@@ -6,7 +6,7 @@ import { StudioPlayground } from './components/StudioPlayground.jsx';
 import { FaqSection } from './components/FaqSection.jsx';
 import { CloneProgress } from './components/CloneProgress.jsx';
 import { CloneDashboard } from './components/CloneDashboard.jsx';
-import { AuthModal } from './components/AuthModal.jsx';
+import { AuthModal, checkIsAdmin } from './components/AuthModal.jsx';
 import { ProUpgradeModal } from './components/ProUpgradeModal.jsx';
 import { AboutModal } from './components/AboutModal.jsx';
 import { PrivacyModal } from './components/PrivacyModal.jsx';
@@ -19,11 +19,18 @@ export default function App() {
   const [cloneData, setCloneData] = useState(null);
   const [error, setError] = useState(null);
 
-  // Auth state management
+  // Auth state management with instant Admin validation
   const [user, setUser] = useState(() => {
     try {
       const stored = localStorage.getItem('zippix_user');
-      return stored ? JSON.parse(stored) : null;
+      if (!stored) return null;
+      const parsed = JSON.parse(stored);
+      if (checkIsAdmin(parsed.email, parsed.username, parsed.name)) {
+        parsed.isAdmin = true;
+        parsed.role = 'Founder & System Admin';
+        parsed.plan = 'Lifetime Unlimited Admin VIP';
+      }
+      return parsed;
     } catch {
       return null;
     }
@@ -37,24 +44,28 @@ export default function App() {
   const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
 
-  // Auto-grant Pro Access on local development
+  // Auto-grant Pro Access on local development or if user is Admin
   const isLocalEnv =
     typeof window !== 'undefined' &&
     (window.location.hostname === 'localhost' ||
       window.location.hostname === '127.0.0.1' ||
       window.location.hostname === '');
 
+  const isAdmin = Boolean(user?.isAdmin);
+
   const [isPro, setIsPro] = useState(() => {
     if (isLocalEnv) return true;
     return localStorage.getItem('zippix_web_is_pro') === 'true';
   });
+
+  const effectiveIsPro = isAdmin || isPro || isLocalEnv;
 
   const [freeClonesUsed, setFreeClonesUsed] = useState(() => {
     return parseInt(localStorage.getItem('zippix_web_clones_used') || '0', 10);
   });
 
   const FREE_MAX = 10;
-  const freeClonesRemaining = Math.max(0, FREE_MAX - freeClonesUsed);
+  const freeClonesRemaining = isAdmin ? Infinity : Math.max(0, FREE_MAX - freeClonesUsed);
 
   const handleActivatePro = () => {
     setIsPro(true);
@@ -63,6 +74,10 @@ export default function App() {
 
   const handleAuthSuccess = (authenticatedUser) => {
     setUser(authenticatedUser);
+    if (authenticatedUser?.isAdmin) {
+      setIsPro(true);
+      localStorage.setItem('zippix_web_is_pro', 'true');
+    }
   };
 
   const handleLogout = () => {
@@ -73,7 +88,8 @@ export default function App() {
   const handleClone = async (targetUrl, depth = 'standard') => {
     setError(null);
 
-    if (!isPro && !isLocalEnv && freeClonesRemaining <= 0 && !user) {
+    // Unrestricted if Pro, Admin, or Free quota available
+    if (!effectiveIsPro && freeClonesRemaining <= 0 && !user) {
       setIsAuthOpen(true);
       return;
     }
@@ -113,7 +129,7 @@ export default function App() {
         }
       }, 200);
 
-      if (!isPro && !isLocalEnv) {
+      if (!effectiveIsPro) {
         const nextUsed = freeClonesUsed + 1;
         setFreeClonesUsed(nextUsed);
         localStorage.setItem('zippix_web_clones_used', nextUsed.toString());
@@ -154,7 +170,7 @@ export default function App() {
         user={user}
         onOpenAuth={() => setIsAuthOpen(true)}
         onLogout={handleLogout}
-        isPro={isPro}
+        isPro={effectiveIsPro}
         freeClonesRemaining={freeClonesRemaining}
         onOpenProModal={() => setIsProModalOpen(true)}
         onOpenAbout={() => setIsAboutOpen(true)}
