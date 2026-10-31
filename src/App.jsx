@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header.jsx';
 import { AnimatedHeroLogo } from './components/AnimatedHeroLogo.jsx';
 import { UrlInputBar } from './components/UrlInputBar.jsx';
@@ -6,7 +6,7 @@ import { StudioPlayground } from './components/StudioPlayground.jsx';
 import { FaqSection } from './components/FaqSection.jsx';
 import { CloneProgress } from './components/CloneProgress.jsx';
 import { CloneDashboard } from './components/CloneDashboard.jsx';
-import { AuthModal, checkIsAdmin } from './components/AuthModal.jsx';
+import { AuthModal } from './components/AuthModal.jsx';
 import { ProUpgradeModal } from './components/ProUpgradeModal.jsx';
 import { AboutModal } from './components/AboutModal.jsx';
 import { PrivacyModal } from './components/PrivacyModal.jsx';
@@ -19,22 +19,39 @@ export default function App() {
   const [cloneData, setCloneData] = useState(null);
   const [error, setError] = useState(null);
 
-  // Auth state management with instant Admin validation
+  // Authenticated user state
   const [user, setUser] = useState(() => {
     try {
       const stored = localStorage.getItem('zippix_user');
-      if (!stored) return null;
-      const parsed = JSON.parse(stored);
-      if (checkIsAdmin(parsed.email, parsed.username, parsed.name)) {
-        parsed.isAdmin = true;
-        parsed.role = 'Founder & System Admin';
-        parsed.plan = 'Lifetime Unlimited Admin VIP';
-      }
-      return parsed;
+      return stored ? JSON.parse(stored) : null;
     } catch {
       return null;
     }
   });
+
+  // Verify token signature with backend API on mount
+  useEffect(() => {
+    const token = localStorage.getItem('zippix_token');
+    if (!token) return;
+
+    fetch('/api/auth/me', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.user) {
+          setUser(data.user);
+          localStorage.setItem('zippix_user', JSON.stringify(data.user));
+        } else {
+          localStorage.removeItem('zippix_token');
+          localStorage.removeItem('zippix_user');
+          setUser(null);
+        }
+      })
+      .catch((err) => {
+        console.warn('Session verification notice:', err.message);
+      });
+  }, []);
 
   // Modals state
   const [isAuthOpen, setIsAuthOpen] = useState(false);
@@ -44,7 +61,7 @@ export default function App() {
   const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
 
-  // Auto-grant Pro Access on local development or if user is Admin
+  // Auto-grant Pro Access on local development or if user is verified Admin
   const isLocalEnv =
     typeof window !== 'undefined' &&
     (window.location.hostname === 'localhost' ||
@@ -81,6 +98,7 @@ export default function App() {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('zippix_token');
     localStorage.removeItem('zippix_user');
     setUser(null);
   };

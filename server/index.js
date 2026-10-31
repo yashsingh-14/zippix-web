@@ -5,6 +5,14 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { cloneWebsiteUrl } from './cloner/engine.js';
 import { createCloneZip, generateTailwindV4, generateTailwindV3, generateCssVariables } from './cloner/packager.js';
+import {
+  registerUser,
+  loginUser,
+  verifyGoogleCredential,
+  verifyToken,
+  requestPasswordReset,
+  ADMIN_EMAIL,
+} from './auth.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,7 +28,76 @@ const cloneStore = new Map();
 
 // API Health Check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', service: 'Zippix Web Cloner Engine', version: '1.0.0' });
+  res.json({
+    status: 'ok',
+    service: 'Zippix Web Cloner Engine',
+    version: '1.0.0',
+    adminConfigured: Boolean(ADMIN_EMAIL),
+  });
+});
+
+// ==========================================
+// REAL PRODUCTION AUTHENTICATION ENDPOINTS
+// ==========================================
+
+// 1. Sign Up (Email & Password)
+app.post('/api/auth/signup', (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+    const result = registerUser({ name, email, password });
+    res.status(201).json({ success: true, ...result });
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
+// 2. Sign In (Email & Password)
+app.post('/api/auth/login', (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const result = loginUser({ email, password });
+    res.status(200).json({ success: true, ...result });
+  } catch (err) {
+    res.status(401).json({ success: false, error: err.message });
+  }
+});
+
+// 3. Google Identity Services OAuth Verification
+app.post('/api/auth/google', (req, res) => {
+  try {
+    const { credential } = req.body;
+    const result = verifyGoogleCredential(credential);
+    res.status(200).json({ success: true, ...result });
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
+// 4. Session Validation (Verify JWT Token)
+app.get('/api/auth/me', (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ success: false, error: 'Authorization token required.' });
+  }
+
+  const token = authHeader.split(' ')[1];
+  const payload = verifyToken(token);
+  if (!payload) {
+    return res.status(401).json({ success: false, error: 'Session expired or invalid.' });
+  }
+
+  res.status(200).json({ success: true, user: payload });
+});
+
+// 5. Password Reset Request
+app.post('/api/auth/forgot-password', (req, res) => {
+  try {
+    const { email } = req.body;
+    const result = requestPasswordReset(email);
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
 });
 
 // Single Clone Endpoint

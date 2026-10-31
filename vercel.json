@@ -12,6 +12,10 @@
       "destination": "/api/clone.js"
     },
     {
+      "source": "/api/auth/:action*",
+      "destination": "/api/auth.js"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

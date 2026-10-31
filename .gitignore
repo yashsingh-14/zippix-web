@@ -5,4 +5,5 @@ temp_clones/
 .env.local
 .DS_Store
 Thumbs.db
+server/data/
 
