@@ -919,6 +919,15 @@ export async function cloneWebsiteViaHttp(targetUrl, onProgress = () => {}) {
 
   onProgress({ step: 5, message: 'Webpage successfully reconstructed!', progress: 100 });
 
+  const isBotChallenge =
+    rawHtml.includes('awsWaf') ||
+    rawHtml.includes('continue shopping') ||
+    rawHtml.includes('Robot Check') ||
+    rawHtml.includes('cf-browser-verification') ||
+    rawHtml.includes('Cloudflare Ray ID') ||
+    rawHtml.includes('Attention Required! | Cloudflare') ||
+    domain.includes('amazon');
+
   return {
     domain,
     url: validUrl,
@@ -929,6 +938,10 @@ export async function cloneWebsiteViaHttp(targetUrl, onProgress = () => {}) {
       fonts: formattedFonts,
     },
     assets: assetsList,
+    isBotChallenge,
+    challengeNotice: isBotChallenge
+      ? 'Amazon uses AWS WAF anti-bot challenges to block cloud servers. To clone Amazon with 100% full products, run Zippix locally on your PC (npm run dev) where real desktop Chrome bypasses this shield!'
+      : null,
   };
 }
 

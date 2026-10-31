@@ -24,6 +24,7 @@ import {
   X,
   Layers,
   ArrowUpRight,
+  AlertTriangle,
 } from 'lucide-react';
 
 export const CloneDashboard = ({ cloneData, onReset, theme = 'dark' }) => {
@@ -52,6 +53,8 @@ export const CloneDashboard = ({ cloneData, onReset, theme = 'dark' }) => {
     downloadUrl = '',
     filename = 'website-clone.zip',
     elapsedMs = 0,
+    isBotChallenge = false,
+    challengeNotice = '',
   } = cloneData || {};
 
   // Formatted JSON tokens string
@@ -268,6 +271,24 @@ export const CloneDashboard = ({ cloneData, onReset, theme = 'dark' }) => {
         <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full border border-sky-400/40 bg-slate-950/90 px-4 py-2 text-xs font-semibold text-sky-300 shadow-2xl backdrop-blur-xl animate-bounce">
           <Check className="h-4 w-4 text-emerald-400" />
           <span>Copied to clipboard!</span>
+        </div>
+      )}
+
+      {/* Bot Challenge / WAF Notice */}
+      {(isBotChallenge || (domain && domain.includes('amazon') && assets.length === 0)) && (
+        <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 sm:p-5 flex items-start gap-3.5 text-amber-200">
+          <div className="p-2 rounded-xl bg-amber-500/20 text-amber-400 shrink-0">
+            <AlertTriangle className="h-5 w-5" />
+          </div>
+          <div className="space-y-1 text-left">
+            <h4 className="text-sm font-bold text-amber-300">
+              AWS WAF Anti-Bot Challenge Encountered ({domain})
+            </h4>
+            <p className="text-xs text-amber-200/90 leading-relaxed">
+              {challengeNotice ||
+                'Amazon uses AWS WAF anti-bot challenges to block cloud servers. To clone Amazon with 100% full products, run Zippix locally on your PC (npm run dev) where real desktop Chrome bypasses this shield!'}
+            </p>
+          </div>
         </div>
       )}
 

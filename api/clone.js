@@ -35,6 +35,8 @@ export default async function handler(req, res) {
       downloadUrl: `/api/download/${cloneId}`,
       filename: `${safeDomain}.full-page.Zippix.zip`,
       elapsedMs: Date.now() - startTime,
+      isBotChallenge: result.isBotChallenge || false,
+      challengeNotice: result.challengeNotice || null,
     });
   } catch (err) {
     console.error('Vercel API Clone Error:', err);
