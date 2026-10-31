@@ -252,7 +252,17 @@ export default function App() {
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-            <span>© {new Date().getFullYear()} Zippix Cloud Technologies. All rights reserved.</span>
+            <div>
+              <span>© {new Date().getFullYear()} Zippix. Created & Architected by </span>
+              <a
+                href="https://github.com/yashsingh-14"
+                target="_blank"
+                rel="author"
+                className="font-medium text-slate-300 hover:text-sky-400 underline underline-offset-4 decoration-white/20 hover:decoration-sky-400 transition"
+              >
+                Yash Singh
+              </a>
+            </div>
             <div className="flex items-center gap-2 text-emerald-400 font-mono">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
               <span>All Systems Operational</span>

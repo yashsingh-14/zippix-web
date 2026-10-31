@@ -56,10 +56,26 @@ export const AboutModal = ({ isOpen, onClose }) => {
           <p>
             To provide UI/UX designers, frontend developers, and digital archivists with the world's most precise tool for inspecting, archiving, and generating production-ready Tailwind CSS design tokens from any public website.
           </p>
+
+          <div className="rounded-2xl border border-sky-500/25 bg-gradient-to-r from-sky-500/10 via-indigo-500/10 to-purple-500/10 p-4 flex items-center justify-between gap-4 mt-2">
+            <div>
+              <span className="text-[11px] font-mono text-sky-400 block uppercase">Creator & Architect</span>
+              <strong className="text-sm font-bold text-white">Yash Singh</strong>
+              <p className="text-xs text-slate-400">Lead Developer & Full-Stack Systems Engineer</p>
+            </div>
+            <a
+              href="https://github.com/yashsingh-14"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-white transition active:scale-95"
+            >
+              GitHub Profile →
+            </a>
+          </div>
         </div>
 
         <div className="border-t border-white/[0.08] pt-4 flex items-center justify-between text-xs text-[#64748b]">
-          <span>Zippix Technologies © 2026</span>
+          <span>Zippix Technologies © 2026 · Created by Yash Singh</span>
           <button onClick={onClose} className="rounded-xl btn-antigravity px-4 py-2 font-bold text-white">
             Close
           </button>

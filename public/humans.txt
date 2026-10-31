@@ -1,0 +1,15 @@
+/* TEAM */
+Creator, Lead Developer & Architect: Yash Singh
+GitHub: https://github.com/yashsingh-14
+Website: https://zippix-web.vercel.app
+Location: India
+
+/* THANKS */
+To the open-source community, React 19, Tailwind CSS v4, and Vite teams.
+
+/* SITE */
+Last update: 2026/10/31
+Standards: HTML5, CSS3, JavaScript ESNext
+Components: React 19, Tailwind CSS v4, Lucide Icons, Express, Puppeteer
+Software: Zippix Web Reconstructor
+Created by: Yash Singh
