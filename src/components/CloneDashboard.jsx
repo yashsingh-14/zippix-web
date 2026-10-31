@@ -908,12 +908,24 @@ export const CloneDashboard = ({
                     ) : asset.type === 'video' ? (
                       <video src={asset.url} className="max-h-full max-w-full rounded object-contain" muted />
                     ) : (
-                      <img
-                        src={asset.url}
-                        alt={asset.name}
-                        className="max-h-full max-w-full rounded object-contain"
-                        loading="lazy"
-                      />
+                      <>
+                        <img
+                          src={(asset.url || '').replace(/&amp;/g, '&')}
+                          alt={asset.name}
+                          className="max-h-full max-w-full rounded object-contain"
+                          loading="lazy"
+                          referrerPolicy="no-referrer"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                            const fb = e.currentTarget.nextElementSibling;
+                            if (fb) fb.classList.remove('hidden');
+                          }}
+                        />
+                        <div className="hidden flex-col items-center justify-center text-center p-2 text-slate-500">
+                          <ImageIcon className="h-6 w-6 text-slate-600 mb-1" />
+                          <span className="text-[10px] font-mono text-slate-400 truncate max-w-[90px]">{asset.name}</span>
+                        </div>
+                      </>
                     )}
 
                     {/* Hover Quick Actions Overlay */}
@@ -987,7 +999,12 @@ export const CloneDashboard = ({
               ) : selectedAsset.type === 'video' ? (
                 <video src={selectedAsset.url} controls className="max-h-56 max-w-full rounded" />
               ) : (
-                <img src={selectedAsset.url} alt={selectedAsset.name} className="max-h-56 max-w-full object-contain" />
+                <img
+                  src={(selectedAsset.url || '').replace(/&amp;/g, '&')}
+                  alt={selectedAsset.name}
+                  className="max-h-56 max-w-full object-contain"
+                  referrerPolicy="no-referrer"
+                />
               )}
             </div>
 

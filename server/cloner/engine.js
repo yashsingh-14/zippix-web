@@ -731,14 +731,18 @@ export async function cloneWebsiteViaHttp(targetUrl, onProgress = () => {}) {
     if (!relUrl || relUrl.startsWith('data:') || relUrl.startsWith('blob:') || relUrl.startsWith('javascript:')) {
       return relUrl;
     }
-    if (relUrl.startsWith('//')) {
-      return parsedUrl.protocol + relUrl;
+    let cleanRel = relUrl.replace(/&amp;/gi, '&').trim();
+    if (cleanRel.includes(' ')) {
+      cleanRel = cleanRel.split(/\s+/)[0];
+    }
+    if (cleanRel.startsWith('//')) {
+      return parsedUrl.protocol + cleanRel;
     }
     try {
       const root = contextUrl ? new URL(contextUrl, validUrl) : parsedUrl;
-      return new URL(relUrl, root.href).href;
+      return new URL(cleanRel, root.href).href;
     } catch {
-      return relUrl;
+      return cleanRel;
     }
   }
 
@@ -846,18 +850,32 @@ export async function cloneWebsiteViaHttp(targetUrl, onProgress = () => {}) {
   const assetsList = [];
   let assetIdx = 0;
 
-  // Images
-  const imgRegex = /<img[^>]+(?:src=["']([^"']+)["']|data-src=["']([^"']+)["'])[^>]*>/gi;
+  // Images (with full support for src, data-src, srcset, srcSet, and HTML entity decoding)
+  const imgRegex = /<img[^>]+(?:src=["']([^"']+)["']|data-src=["']([^"']+)["']|srcset=["']([^"']+)["']|srcSet=["']([^"']+)["'])[^>]*>/gi;
   let imgMatch;
-  while ((imgMatch = imgRegex.exec(rawHtml)) !== null && assetIdx < 40) {
-    const src = imgMatch[1] || imgMatch[2];
-    if (src && !src.startsWith('data:')) {
+  while ((imgMatch = imgRegex.exec(rawHtml)) !== null && assetIdx < 50) {
+    let rawSrc = imgMatch[1] || imgMatch[2] || imgMatch[3] || imgMatch[4];
+    if (rawSrc && !rawSrc.startsWith('data:')) {
+      rawSrc = rawSrc.replace(/&amp;/gi, '&').trim();
+      if (rawSrc.includes(',')) {
+        const candidates = rawSrc.split(',').map((s) => s.trim().split(/\s+/)[0]);
+        rawSrc = candidates[candidates.length - 1] || candidates[0];
+      } else if (rawSrc.includes(' ')) {
+        rawSrc = rawSrc.split(/\s+/)[0];
+      }
       const altMatch = imgMatch[0].match(/alt=["']([^"']*)["']/i);
+      const absUrl = toAbsoluteUrl(rawSrc, validUrl);
       assetsList.push({
         id: `img-${assetIdx}`,
         type: 'image',
-        name: altMatch ? altMatch[1] || `image-${assetIdx + 1}` : `image-${assetIdx + 1}`,
-        url: toAbsoluteUrl(src, validUrl),
+        name: altMatch
+          ? altMatch[1]
+              .replace(/&#x27;/g, "'")
+              .replace(/&quot;/g, '"')
+              .replace(/&amp;/g, '&')
+              .trim() || `image-${assetIdx + 1}`
+          : `image-${assetIdx + 1}`,
+        url: absUrl,
         width: 0,
         height: 0,
       });
