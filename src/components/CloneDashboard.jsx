@@ -25,9 +25,19 @@ import {
   Layers,
   ArrowUpRight,
   AlertTriangle,
+  Crown,
 } from 'lucide-react';
+import { MotionComponentsRipper } from './MotionComponentsRipper.jsx';
 
-export const CloneDashboard = ({ cloneData, onReset, theme = 'dark' }) => {
+export const CloneDashboard = ({
+  cloneData,
+  onReset,
+  theme = 'dark',
+  isPro = false,
+  freeDownloadsRemaining = 4,
+  onRequirePro,
+  onRecordDownload,
+}) => {
   const [activeTab, setActiveTab] = useState('preview');
   const [viewport, setViewport] = useState('desktop');
   const [copiedKey, setCopiedKey] = useState(null);
@@ -93,6 +103,13 @@ export const CloneDashboard = ({ cloneData, onReset, theme = 'dark' }) => {
   };
 
   const handleDownloadHtml = () => {
+    // Quota restriction for full HTML code (Assets remain free)
+    if (!isPro && freeDownloadsRemaining <= 0) {
+      if (onRequirePro) onRequirePro('html');
+      return;
+    }
+    if (onRecordDownload) onRecordDownload();
+
     const blob = new Blob([html || '<!DOCTYPE html><html><body>Empty</body></html>'], {
       type: 'text/html;charset=utf-8',
     });
@@ -107,6 +124,13 @@ export const CloneDashboard = ({ cloneData, onReset, theme = 'dark' }) => {
   };
 
   const handleDownloadCurrentCodeFile = () => {
+    // Quota restriction for full HTML code
+    if (codeType === 'html' && !isPro && freeDownloadsRemaining <= 0) {
+      if (onRequirePro) onRequirePro('code');
+      return;
+    }
+    if (codeType === 'html' && onRecordDownload) onRecordDownload();
+
     let content = '';
     let ext = 'css';
     let fname = 'theme';
@@ -145,6 +169,13 @@ export const CloneDashboard = ({ cloneData, onReset, theme = 'dark' }) => {
   };
 
   const handleDownloadFullZip = async () => {
+    // Quota restriction for full ZIP archive (Assets remain free)
+    if (!isPro && freeDownloadsRemaining <= 0) {
+      if (onRequirePro) onRequirePro('zip');
+      return;
+    }
+    if (onRecordDownload) onRecordDownload();
+
     try {
       const zip = new JSZip();
       zip.file('index.html', html || '<!DOCTYPE html><html><body>Empty</body></html>');
@@ -327,35 +358,50 @@ export const CloneDashboard = ({ cloneData, onReset, theme = 'dark' }) => {
             </p>
           </div>
 
-          {/* Action Controls */}
-          <div className="flex items-center gap-2.5 flex-wrap">
-            <button
-              onClick={handleDownloadHtml}
-              className="flex items-center gap-1.5 rounded-xl border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 px-4 py-2.5 text-xs font-bold transition shadow-sm active:scale-95"
-              title="Download standalone single HTML file"
-            >
-              <Download className="h-4 w-4 text-sky-400" />
-              <span>Download HTML</span>
-            </button>
+          {/* Action Controls & Quota Pill */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            <div className="text-[11px] font-medium text-slate-400 flex items-center gap-1.5">
+              {isPro ? (
+                <span className="px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 flex items-center gap-1 shadow-sm font-semibold">
+                  <Crown className="h-3.5 w-3.5 text-amber-400" />
+                  Unlimited Code Exports (∞)
+                </span>
+              ) : (
+                <span className="px-3 py-1 rounded-full bg-white/[0.05] border border-white/10 text-slate-300 text-xs font-mono">
+                  <strong className="text-sky-400">{freeDownloadsRemaining}</strong> of 4 free exports left
+                </span>
+              )}
+            </div>
 
-            <button
-              onClick={handleDownloadFullZip}
-              className="btn-zippix-primary flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-bold shadow-lg hover:shadow-sky-500/25 active:scale-95 transition cursor-pointer"
-              title="Download full project ZIP archive with offline assets & tokens"
-            >
-              <Archive className="h-4 w-4 fill-white" />
-              <span>Download Full ZIP</span>
-            </button>
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <button
+                onClick={handleDownloadHtml}
+                className="flex items-center gap-1.5 rounded-xl border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 px-4 py-2.5 text-xs font-bold transition shadow-sm active:scale-95"
+                title="Download standalone single HTML file"
+              >
+                <Download className="h-4 w-4 text-sky-400" />
+                <span>Download HTML</span>
+              </button>
 
-            {/* Clone Another Button - Smoothly redirects to URL box */}
-            <button
-              onClick={handleCloneAnotherClick}
-              className="flex items-center gap-2 rounded-xl border border-white/12 bg-white/5 hover:bg-white/10 hover:border-sky-400/40 px-4 py-2.5 text-xs font-semibold text-slate-200 hover:text-white transition shadow-sm active:scale-95 group cursor-pointer"
-              title="Click to redirect to URL box and clone another website"
-            >
-              <RotateCcw className="h-3.5 w-3.5 text-sky-400 group-hover:-rotate-90 transition-transform duration-300" />
-              <span>Clone Another</span>
-            </button>
+              <button
+                onClick={handleDownloadFullZip}
+                className="btn-zippix-primary flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-bold shadow-lg hover:shadow-sky-500/25 active:scale-95 transition cursor-pointer"
+                title="Download full project ZIP archive with offline assets & tokens"
+              >
+                <Archive className="h-4 w-4 fill-white" />
+                <span>Download Full ZIP</span>
+              </button>
+
+              {/* Clone Another Button - Smoothly redirects to URL box */}
+              <button
+                onClick={handleCloneAnotherClick}
+                className="flex items-center gap-2 rounded-xl border border-white/12 bg-white/5 hover:bg-white/10 hover:border-sky-400/40 px-4 py-2.5 text-xs font-semibold text-slate-200 hover:text-white transition shadow-sm active:scale-95 group cursor-pointer"
+                title="Click to redirect to URL box and clone another website"
+              >
+                <RotateCcw className="h-3.5 w-3.5 text-sky-400 group-hover:-rotate-90 transition-transform duration-300" />
+                <span>Clone Another</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -433,23 +479,23 @@ export const CloneDashboard = ({ cloneData, onReset, theme = 'dark' }) => {
             </span>
           </button>
 
-          {/* Card 4: Animations & Code -> Switches to Tailwind & Code Tab */}
+          {/* Card 4: Motions & UI FX -> Switches to Motion & Component Ripper Tab */}
           <button
             type="button"
-            onClick={() => setActiveTab('tailwind')}
+            onClick={() => setActiveTab('motion')}
             className={`rounded-2xl p-3 border text-left transition-all duration-200 group cursor-pointer active:scale-95 ${
-              activeTab === 'tailwind'
-                ? 'bg-emerald-500/15 border-emerald-400/60 ring-2 ring-emerald-500/20'
-                : 'bg-white/[0.03] border-white/[0.08] hover:border-emerald-400/40 hover:bg-white/[0.06]'
+              activeTab === 'motion'
+                ? 'bg-amber-500/15 border-amber-400/60 ring-2 ring-amber-500/20'
+                : 'bg-white/[0.03] border-white/[0.08] hover:border-amber-400/40 hover:bg-white/[0.06]'
             }`}
           >
             <div className="flex items-center justify-between text-slate-400 text-[10px] uppercase font-mono mb-1">
-              <span>Animations</span>
-              <span className="text-emerald-400 group-hover:translate-x-0.5 transition-transform">→</span>
+              <span>Motions & UI FX</span>
+              <span className="text-amber-400 group-hover:translate-x-0.5 transition-transform">→</span>
             </div>
-            <strong className="text-sm font-bold text-emerald-400">Active & Smooth</strong>
-            <span className="text-[10px] text-emerald-300/80 font-medium mt-1 inline-block">
-              {activeTab === 'tailwind' ? 'Active Tab' : 'View generated CSS'}
+            <strong className="text-sm font-bold text-amber-400">Marquees, Cards & 3D</strong>
+            <span className="text-[10px] text-amber-300/80 font-medium mt-1 inline-block">
+              {activeTab === 'motion' ? 'Active Tab' : 'Click to rip animated sections'}
             </span>
           </button>
         </div>
@@ -468,6 +514,21 @@ export const CloneDashboard = ({ cloneData, onReset, theme = 'dark' }) => {
           >
             <Monitor className="h-3.5 w-3.5" />
             <span>Live Sandbox Preview</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('motion')}
+            className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold transition active:scale-95 cursor-pointer ${
+              activeTab === 'motion'
+                ? 'bg-gradient-to-r from-amber-500 to-indigo-600 text-white shadow-lg shadow-amber-500/25 ring-1 ring-amber-400/50'
+                : 'text-slate-400 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            <Sparkles className="h-3.5 w-3.5 text-amber-400" />
+            <span>Motions & UI FX</span>
+            <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
+              5 Ripper FX
+            </span>
           </button>
 
           <button
@@ -631,6 +692,20 @@ export const CloneDashboard = ({ cloneData, onReset, theme = 'dark' }) => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* ======================================================== */}
+      {/* TAB: MOTIONS & UI COMPONENTS RIPPER                       */}
+      {/* ======================================================== */}
+      {activeTab === 'motion' && (
+        <MotionComponentsRipper
+          domain={domain}
+          title={title}
+          tokens={tokens}
+          html={html}
+          isPro={isPro}
+          onRequirePro={onRequirePro}
+        />
       )}
 
       {/* ======================================================== */}

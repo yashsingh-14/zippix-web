@@ -81,8 +81,17 @@ export default function App() {
     return parseInt(localStorage.getItem('zippix_web_clones_used') || '0', 10);
   });
 
-  const FREE_MAX = 10;
+  // Strict 4 free full-code / ZIP exports limit (Assets and colors are unlimited)
+  const FREE_MAX = 4;
   const freeClonesRemaining = isAdmin ? Infinity : Math.max(0, FREE_MAX - freeClonesUsed);
+
+  const handleRecordExport = () => {
+    if (!effectiveIsPro) {
+      const nextUsed = freeClonesUsed + 1;
+      setFreeClonesUsed(nextUsed);
+      localStorage.setItem('zippix_web_clones_used', nextUsed.toString());
+    }
+  };
 
   const handleActivatePro = () => {
     setIsPro(true);
@@ -246,7 +255,15 @@ export default function App() {
         {/* Cloned Result Dashboard */}
         {cloneData && !isLoading && (
           <div id="cloned-dashboard-section" className="mx-auto max-w-7xl px-4 scroll-mt-24">
-            <CloneDashboard cloneData={cloneData} onReset={handleCloneAnother} theme="dark" />
+            <CloneDashboard
+              cloneData={cloneData}
+              onReset={handleCloneAnother}
+              theme="dark"
+              isPro={effectiveIsPro}
+              freeDownloadsRemaining={freeClonesRemaining}
+              onRequirePro={() => setIsProModalOpen(true)}
+              onRecordDownload={handleRecordExport}
+            />
           </div>
         )}
 

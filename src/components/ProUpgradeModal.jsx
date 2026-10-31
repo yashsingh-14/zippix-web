@@ -53,9 +53,12 @@ export const ProUpgradeModal = ({ isOpen, onClose, isPro, onActivatePro }) => {
             <Sparkles className="h-3.5 w-3.5 fill-sky-300" />
             <span>Zippix Cloud Pro</span>
           </div>
-          <h2 className="text-2xl font-black text-white">Unlimited Website Cloning</h2>
+          <h2 className="text-2xl font-black text-white">Unlock Unlimited Code & ZIP Exports</h2>
           <p className="text-xs text-[#94a3b8] max-w-sm mx-auto">
-            Clone unlimited websites, extract all 4K media assets, and export production-ready Tailwind themes in 1-click.
+            You have reached the 4 free full-code export limit. Upgrade to Pro for unlimited ZIP packages and complete HTML source downloads.
+          </p>
+          <p className="text-[11px] text-emerald-400 font-medium">
+            ✓ Images, SVGs, color tokens & CSS styles remain 100% free with unlimited access.
           </p>
         </div>
 
