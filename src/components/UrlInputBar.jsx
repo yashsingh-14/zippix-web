@@ -35,6 +35,7 @@ export const UrlInputBar = ({ onClone, isLoading }) => {
 
           {/* URL Input Field */}
           <input
+            id="zippix-url-input"
             type="url"
             value={url}
             onChange={(e) => setUrl(e.target.value)}

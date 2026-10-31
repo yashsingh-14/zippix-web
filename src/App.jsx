@@ -125,6 +125,20 @@ export default function App() {
     }
   };
 
+  const handleCloneAnother = () => {
+    const heroEl = document.getElementById('cloner-section');
+    if (heroEl) {
+      heroEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    setTimeout(() => {
+      const inputEl = document.querySelector('#reconstructor-console input[type="url"]');
+      if (inputEl) {
+        inputEl.focus();
+        inputEl.select();
+      }
+    }, 350);
+  };
+
   return (
     <div className="relative min-h-screen flex flex-col zippix-canvas text-slate-100 overflow-x-hidden selection:bg-sky-500/30 selection:text-sky-200">
       {/* Signature Logo-Matched Ambient Light Mesh */}
@@ -198,7 +212,7 @@ export default function App() {
         {/* Cloned Result Dashboard */}
         {cloneData && !isLoading && (
           <div id="cloned-dashboard-section" className="mx-auto max-w-7xl px-4 scroll-mt-24">
-            <CloneDashboard cloneData={cloneData} onReset={() => setCloneData(null)} theme="dark" />
+            <CloneDashboard cloneData={cloneData} onReset={handleCloneAnother} theme="dark" />
           </div>
         )}
 
