@@ -820,7 +820,22 @@ export async function cloneWebsiteViaHttp(targetUrl, onProgress = () => {}) {
   onProgress({ step: 1, message: 'Initiating Cloud Stream Reconstructor...', progress: 20 });
 
   const CHROME_UA =
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36';
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36';
+
+  const BROWSER_HEADERS = {
+    'User-Agent': CHROME_UA,
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+    'Accept-Language': 'en-IN,en-US,en;q=0.9,hi;q=0.8',
+    'Sec-Ch-Ua': '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+    'Sec-Ch-Ua-Mobile': '?0',
+    'Sec-Ch-Ua-Platform': '"Windows"',
+    'Sec-Fetch-Dest': 'document',
+    'Sec-Fetch-Mode': 'navigate',
+    'Sec-Fetch-Site': 'none',
+    'Sec-Fetch-User': '?1',
+    'Upgrade-Insecure-Requests': '1',
+    'Cache-Control': 'max-age=0',
+  };
 
   function toAbsoluteUrl(relUrl, contextUrl) {
     if (!relUrl || relUrl.startsWith('data:') || relUrl.startsWith('blob:') || relUrl.startsWith('javascript:')) {
@@ -849,23 +864,26 @@ export async function cloneWebsiteViaHttp(targetUrl, onProgress = () => {}) {
   let rawHtml = '';
   try {
     const res = await fetch(validUrl, {
-      headers: {
-        'User-Agent': CHROME_UA,
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Cache-Control': 'no-cache',
-      },
+      headers: BROWSER_HEADERS,
       redirect: 'follow',
       signal: controller.signal,
     });
     clearTimeout(timeoutId);
 
     if (!res.ok) {
+      if (res.status === 403 || res.status === 401) {
+        throw new Error(
+          `Target returned HTTP ${res.status} (Firewall / Geo-Blocked). ${domain} strictly blocks foreign cloud hosting servers (Vercel/AWS). To clone ${domain} with 100% full content, run Zippix locally on your PC (open start.bat or http://localhost:3000) where your real Indian IP bypasses this firewall instantly!`
+        );
+      }
       throw new Error(`Target returned HTTP status ${res.status}`);
     }
     rawHtml = await res.text();
   } catch (err) {
     clearTimeout(timeoutId);
+    if (err.message && err.message.includes('Firewall')) {
+      throw err;
+    }
     throw new Error(`Could not connect to ${validUrl}: ${err.message}`);
   }
 
@@ -889,7 +907,7 @@ export async function cloneWebsiteViaHttp(targetUrl, onProgress = () => {}) {
     try {
       const absHref = toAbsoluteUrl(href, validUrl);
       const sRes = await fetch(absHref, {
-        headers: { 'User-Agent': CHROME_UA },
+        headers: BROWSER_HEADERS,
         signal: AbortSignal.timeout(3000),
       });
       if (sRes.ok) {

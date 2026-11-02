@@ -12,6 +12,7 @@ import { AboutModal } from './components/AboutModal.jsx';
 import { PrivacyModal } from './components/PrivacyModal.jsx';
 import { TermsModal } from './components/TermsModal.jsx';
 import { ContactModal } from './components/ContactModal.jsx';
+import { ShieldAlert } from 'lucide-react';
 
 export default function App() {
   const [url, setUrl] = useState('');
@@ -239,8 +240,14 @@ export default function App() {
 
           {/* Error Banner */}
           {error && (
-            <div className="mx-auto max-w-xl rounded-2xl border border-red-500/30 bg-red-950/40 p-3.5 text-xs text-red-200 text-center backdrop-blur-md">
-              {error}
+            <div className="mx-auto max-w-xl rounded-2xl border border-red-500/35 bg-red-950/60 p-4 text-xs sm:text-sm text-red-200 text-left backdrop-blur-xl shadow-2xl space-y-1.5 transition-all animate-in fade-in zoom-in-95 duration-200">
+              <div className="flex items-center gap-2 font-semibold text-red-300">
+                <ShieldAlert className="h-4 w-4 shrink-0 text-red-400" />
+                <span>Notice / Could not connect</span>
+              </div>
+              <p className="text-slate-300 font-normal leading-relaxed text-xs">
+                {error}
+              </p>
             </div>
           )}
         </section>
