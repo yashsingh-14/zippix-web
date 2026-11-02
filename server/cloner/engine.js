@@ -1,6 +1,101 @@
 import { launchHeadlessBrowser, hasAvailableBrowser } from './browser.js';
 
 /**
+ * Sanitizes and shields HTML for bulletproof sandboxed iframe & offline preview:
+ * - Strips CSP (Content-Security-Policy), X-Frame-Options & refresh meta tags so iframe isn't blocked.
+ * - Neutralizes framework hydration scripts (Next.js App Router, Turbopack, Nuxt, Webpack runtime)
+ *   that attempt to connect to non-existent backend APIs and unmount the DOM with Error Boundaries ("This page couldn't load").
+ * - Strips crash-prone trackers & telemetry (GTM, Sentry, Datadog, Facebook, Clarity).
+ * - Disarms frame-busters (window.top !== window.self).
+ * - Injects unhandled error dampeners so no third-party script crashes the live preview.
+ */
+export function sanitizeHtmlForSandbox(rawHtml, originUrl) {
+  if (!rawHtml) return '';
+  let html = rawHtml;
+  let origin = '';
+  try {
+    origin = new URL(originUrl).origin;
+  } catch {
+    origin = '';
+  }
+
+  // 1. Strip CSP, X-Frame-Options, Frame-Ancestors, and auto-refresh meta tags
+  html = html.replace(
+    /<meta[^>]+(?:http-equiv=["'](?:content-security-policy|x-frame-options|refresh)["']|name=["'](?:content-security-policy)["'])[^>]*>/gi,
+    ''
+  );
+
+  // 2. Ensure <base href="..."> exists so all relative images, styles, and assets resolve correctly
+  if (origin && !/<base\b/i.test(html)) {
+    const baseTag = `<base href="${origin}/">\n`;
+    if (/<head[^>]*>/i.test(html)) {
+      html = html.replace(/(<head[^>]*>)/i, `$1\n  ${baseTag}`);
+    } else {
+      html = `<!DOCTYPE html>\n<html><head>\n  ${baseTag}</head><body>${html}</body></html>`;
+    }
+  }
+
+  // 3. Neutralize intrusive hydration / backend-dependent / tracker scripts
+  html = html.replace(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi, (fullMatch, attrs, innerContent) => {
+    // Keep JSON-LD, schema, or Zippix internal scripts
+    if (/type=["']application\/(ld\+json|json)["']/i.test(attrs) || /id=["']zippix-/i.test(attrs)) {
+      return fullMatch;
+    }
+
+    const isHydration = /(__next_f|__next_s|__NEXT_DATA__|TURBOPACK|__webpack_require__|webpackChunk|handleISRError|createRoot|hydrateRoot|_rsc|__NUXT__|___gatsby|__remixContext)/i.test(innerContent);
+    const isTrackerOrFrameworkChunk = /src=["'][^"']*(?:_next\/static|_nuxt|turbopack|webpack|sentry|datadog|google-analytics|googletagmanager|gtag|segment|hotjar|clarity|facebook)[^"']*["']/i.test(attrs);
+
+    if (isHydration || isTrackerOrFrameworkChunk) {
+      return '<!-- zippix: sanitized backend hydration script -->';
+    }
+
+    return fullMatch;
+  });
+
+  // 4. Inject Zippix Sandbox Shield script at the top of <head>
+  const shieldScript = `
+  <script id="zippix-sandbox-shield">
+    (function() {
+      // 1. Disarm frame-busters (window.top redirect attacks)
+      try {
+        Object.defineProperty(window, 'top', { get: function() { return window.self; }, configurable: true });
+        Object.defineProperty(window, 'parent', { get: function() { return window.self; }, configurable: true });
+      } catch(e) {}
+
+      // 2. Suppress unhandled third-party runtime exceptions from crashing the sandbox
+      window.addEventListener('error', function(e) {
+        if (e && e.message) {
+          console.warn('[Zippix Sandbox Shield] Suppressed external error:', e.message);
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        return true;
+      }, true);
+
+      window.addEventListener('unhandledrejection', function(e) {
+        if (e && e.reason) {
+          console.warn('[Zippix Sandbox Shield] Suppressed promise rejection:', e.reason);
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        return true;
+      }, true);
+
+      // 3. Disarm Next.js Global Error boundary from wiping DOM if any script tries to call it
+      window.__NEXT_DATA__ = window.__NEXT_DATA__ || { props: {}, page: '/', query: {}, buildId: 'zippix' };
+    })();
+  </script>`;
+
+  if (/<head[^>]*>/i.test(html)) {
+    html = html.replace(/(<head[^>]*>)/i, `$1\n${shieldScript}\n`);
+  } else {
+    html = shieldScript + '\n' + html;
+  }
+
+  return html;
+}
+
+/**
  * Zippix Enterprise Cloud Cloner Engine v5.0 (Ultimate High-Fidelity & Motion Replica)
  * - Exact Scroll-Triggered Entrance Reveals (.reveal-on-scroll, .reveal-from-left, .reveal-from-right, .reveal-smoky-wave, .reveal-cinematic-sparkle)
  * - Cinematic Sparkling Text Sweep Animation with golden gradient light beam
@@ -695,7 +790,7 @@ html.lenis, html.lenis body {
       domain,
       url: validUrl,
       title: cloneResult.title,
-      html: cloneResult.html,
+      html: sanitizeHtmlForSandbox(cloneResult.html, validUrl),
       tokens: cloneResult.tokens,
       assets: cloneResult.assets,
     };
@@ -950,7 +1045,7 @@ export async function cloneWebsiteViaHttp(targetUrl, onProgress = () => {}) {
     domain,
     url: validUrl,
     title,
-    html: processedHtml,
+    html: sanitizeHtmlForSandbox(processedHtml, validUrl),
     tokens: {
       colors: sortedColors,
       fonts: formattedFonts,

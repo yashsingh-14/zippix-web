@@ -72,11 +72,43 @@ export const CloneDashboard = ({
     return JSON.stringify(tokens, null, 2);
   }, [tokens]);
 
+  // Client-side sanitization for iframe sandbox (strips CSP, X-Frame-Options & crashing Next/Nuxt hydration scripts)
+  const safeHtml = useMemo(() => {
+    if (!html) return '';
+    let clean = html;
+    clean = clean.replace(
+      /<meta[^>]+(?:http-equiv=["'](?:content-security-policy|x-frame-options|refresh)["']|name=["'](?:content-security-policy)["'])[^>]*>/gi,
+      ''
+    );
+    clean = clean.replace(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi, (match, attrs, content) => {
+      if (/type=["']application\/(ld\+json|json)["']/i.test(attrs) || /id=["']zippix-/i.test(attrs)) {
+        return match;
+      }
+      const isHydration = /(__next_f|__next_s|__NEXT_DATA__|TURBOPACK|__webpack_require__|webpackChunk|handleISRError|createRoot|hydrateRoot|_rsc|__NUXT__|___gatsby|__remixContext)/i.test(content);
+      const isTrackerOrChunk = /src=["'][^"']*(?:_next\/static|_nuxt|turbopack|webpack|sentry|datadog|google-analytics|googletagmanager|gtag|segment|hotjar|clarity|facebook)[^"']*["']/i.test(attrs);
+      if (isHydration || isTrackerOrChunk) {
+        return '<!-- zippix: sanitized backend hydration script -->';
+      }
+      return match;
+    });
+    return clean;
+  }, [html]);
+
   const handleCopy = (text, key) => {
     if (!text) return;
     navigator.clipboard.writeText(text);
     setCopiedKey(key);
     setTimeout(() => setCopiedKey(null), 1800);
+  };
+
+  const handleOpenPreviewNewTab = () => {
+    if (safeHtml || html) {
+      const blob = new Blob([safeHtml || html], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+    } else if (previewUrl) {
+      window.open(previewUrl, '_blank');
+    }
   };
 
   const handleReloadIframe = () => {
@@ -214,14 +246,6 @@ export const CloneDashboard = ({
         window.location.href = downloadUrl;
       }
     }
-  };
-
-  const handleOpenPreviewNewTab = () => {
-    const blob = new Blob([html || '<!DOCTYPE html><html><body>Empty</body></html>'], {
-      type: 'text/html;charset=utf-8',
-    });
-    const url = URL.createObjectURL(blob);
-    window.open(url, '_blank');
   };
 
   const handleDownloadSingleAsset = (asset, e) => {
@@ -669,13 +693,20 @@ export const CloneDashboard = ({
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5">
                   <button
                     onClick={handleReloadIframe}
-                    className="p-1 rounded-md text-slate-400 hover:text-white transition"
+                    className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition cursor-pointer"
                     title="Reload Sandbox"
                   >
                     <RefreshCw className={`h-3 w-3 ${isReloading ? 'animate-spin text-sky-400' : ''}`} />
+                  </button>
+                  <button
+                    onClick={handleOpenPreviewNewTab}
+                    className="p-1.5 rounded-lg text-slate-400 hover:text-sky-300 hover:bg-white/10 transition cursor-pointer"
+                    title="Open full page in new tab"
+                  >
+                    <ExternalLink className="h-3 w-3" />
                   </button>
                 </div>
               </div>
@@ -683,11 +714,11 @@ export const CloneDashboard = ({
               {/* Sandboxed iframe */}
               <iframe
                 key={iframeKey}
-                srcDoc={html}
+                srcDoc={safeHtml || html}
                 src={!html ? previewUrl : undefined}
                 title="Cloned Website Live Preview"
                 className="h-[760px] w-full bg-white border-0 transition-opacity duration-300"
-                sandbox="allow-scripts allow-same-origin"
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"
               />
             </div>
           </div>
